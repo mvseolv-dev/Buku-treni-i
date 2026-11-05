@@ -37,7 +37,7 @@ npm run dev
 
 Astoņiem fiziskajiem/stiepšanās vingrinājumiem ir īstu cilvēku foto demonstrējumi no Free Exercise DB ar piesaisti izpildes soļiem. Attēli un licence glabājas lokāli. Pārējiem 92 vingrinājumiem shēma ir redzama uzreiz gan kartītē, gan vingrinājuma skatā līdzās izpildes ceļvedim. Shēmas nav paslēptas izvērsnē. Tie nav nepārtraukti GIF vai video demonstrējumi. Pilns treniņš noslēdzas ar piecām stiepšanās minūtēm.
 
-Avotu lasīšanu šajā vidē bloķēja tīkla politika. Jaunie teksti ir patstāvīgi BUKI treniņu varianti. 5–4–3–2–1 tagad seko lietotāja attēlam bez pārsvītrotā posma; iepriekšējais patvaļīgais skaitīšanas variants ir noņemts. Tam ir sākuma kadrs un četri darbības posmi: divsolis no kreisās, apkārt konusam 0 un divsolis no labās, metiens no kreisā stūra pie 3, tad metiens loka augšā pie 1. Konuss 2 paliek tikai kā izvietojuma orientieris. Izpētes statuss un saites ir `SOURCES.md`.
+Avotu lasīšanu šajā vidē bloķēja tīkla politika. Jaunie teksti ir patstāvīgi BUKI treniņu varianti. 5–4–3–2–1 seko lietotāja pēdējam precizējumam; iepriekšējais patvaļīgais skaitīšanas variants ir noņemts. Tam ir sākuma kadrs un pieci darbības posmi: divsolis no kreisās, apkārt konusam 0 un divsolis no labās, metiens pie stūra 3, metiens pie stūra 2, tad metiens loka augšā pie 1. Izpētes statuss un saites ir `SOURCES.md`.
 
 ## Pārbaudes
 
@@ -52,3 +52,7 @@ Logo: BK BUKI, lietotāja nodrošināts materiāls. Barlow fonti: SIL Open Font 
 `guides.js` un `additional-drills.js` glabā katru norādi kopā ar tās konkrēto izvietojumu un maršrutiem. `training.js` izmanto tieši šo norāžu secību. Metieni un piespēles ir dzeltenas pārtrauktas līnijas; spēlētāju pārvietošanās ir zila. Piespēle un nākamais metiens tiek atskaņoti secīgi. Konusi paliek vienā vietā visos konkrētā vingrinājuma posmos. Daudzvirzienu vingrinājumiem izmanto laukuma skatu; piespēlei ar atsitienu — sānskatu; stājas darbam — tehnikas ilustrāciju. “Visa secība” rāda visus posmus vienlaikus.
 
 Automātiskās pārbaudes pārbauda 100 ierakstus, katra maršruta sākumu pie pareizā spēlētāja, foto failu esamību, visu laika budžetu kombinācijas un lietotāja 5–4–3–2–1 maršruta konkrētos punktus. Pārlūka pārbaudes apliecina renderēšanu un vadību; tās neaizstāj kvalificēta trenera biomehānikas novērtējumu.
+
+## Stiepšanās foto
+
+Visiem sešiem stiepšanās vingrinājumiem ir vizuāli pārskatīts, lokāli glabāts cilvēka foto. Stiepšanās sadaļa parāda visus sešus uzreiz. Tie ir darba pozas piemēri; lietotne tiem neizdomā sākuma/beigu fotopāri, ja avots to nepiedāvā. Teksta soļi paliek atsevišķi. Pārbaudot bibliotēku, nevienam stiepšanās vingrinājumam nav atļauts palikt bez foto.

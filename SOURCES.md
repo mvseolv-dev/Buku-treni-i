@@ -10,7 +10,7 @@
 - Astoņi vingrinājumi: pietupiens, planks, ikru stiepšana pie sienas, gūžas priekšpuses stiepšana uz ceļa, sēdus augšstilba aizmugures stiepšana, pleca stiepšana pāri ķermenim, sānu stiepšana stāvus un augšstilba priekšpuses stiepšana ar pēdu uz soliņa.
 - Apraksti latviski pielāgoti konkrēto pozīciju secībai un mēreniem atkārtojumiem/ilgumiem. Tie nav individuāls medicīnisks ieteikums.
 - Nav pierādījumu, ka tieši šī bibliotēka tika izmantota lietotāja iepriekšējā “Mans uzturs” projektā. Šī saikne netiek apgalvota.
-- Tie ir divu pozīciju fotoattēli, nevis video vai GIF. Automātiska soļu maiņa pārslēdz atbilstošo foto; tā nesimulē nepārtrauktu kustību.
+- Tie ir divu pozīciju fotoattēli, nevis video vai GIF. Pietupienam un plankam soļu maiņa pārslēdz atbilstošo foto; stiepšanās vingrinājumiem redzams viens pārskatīts darba pozas piemērs, neizdomājot atsevišķas neesošas kustības fāzes.
 
 ## Basketbola avotu izpēte
 
@@ -29,4 +29,4 @@ Vides konfigurācijas melnrakstā pievienoti tikai šo avotu domēni, saglabājo
 
 ## Vingrinājumu varianti
 
-Knockout ir bez svešu bumbu aizsišanas. HORSE lieto piecu burtu izslēgšanu. Spēle līdz 21 ir BUKI metienu punktu spēle, nevis kontakta 21. 5–4–3–2–1 pārrakstīts pēc lietotāja attēla: četri konusi 0/1/2/3, sākums soda līnijas kreisajā sānā, kreisais divsolis, apkārt konusam 0 un labais divsolis, metiens pie 3 un metiens pie 1. Lietotāja pārsvītrotais metiens pie 2 ir izņemts. Vecā 5/4/3/2/1 trāpījumu skaitīšanas progresija ir noņemta. Spēļu noteikumi var atšķirties, tāpēc lietotnē norādīts tieši izmantotais variants.
+Knockout ir bez svešu bumbu aizsišanas. HORSE lieto piecu burtu izslēgšanu. Spēle līdz 21 ir BUKI metienu punktu spēle, nevis kontakta 21. 5–4–3–2–1 pārrakstīts pēc lietotāja attēla: četri konusi 0/1/2/3, sākums soda līnijas kreisajā sānā, kreisais divsolis, apkārt konusam 0 un labais divsolis, pēc tam metieni pie 3 → 2 → 1. Pēc sākotnējā attēla lietotājs tekstā precizēja, ka metiens pie 2 ir jāiekļauj; tas ir atjaunots. Vecā 5/4/3/2/1 trāpījumu skaitīšanas progresija ir noņemta. Spēļu noteikumi var atšķirties, tāpēc lietotnē norādīts tieši izmantotais variants.

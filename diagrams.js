@@ -1,7 +1,20 @@
 import {guides} from './guides.js';
 const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
-export const routePath=points=>'M'+points.slice(0,2).join(' ')+Array.from({length:points.length/2-1},(_,i)=>' L'+points.slice(i*2+2,i*2+4).join(' ')).join('');
-function person(p){const blue=p.role==='defender'?'#f5f9fc':'#178bd1',ink=p.role==='defender'?'#126090':'#fff';return `<g stroke="#084d79" stroke-width="2"><path d="M-17 -3L-32 -14 M17 -3L32 9" stroke="${blue}" stroke-width="13" stroke-linecap="round"/><path d="M-8 15L-10 31 M8 15L15 28" stroke="${blue}" stroke-width="10" stroke-linecap="round"/><circle r="19" fill="${blue}"/><text y="5" text-anchor="middle" font-size="13" font-weight="800" fill="${ink}" stroke="none" font-family="Arial">${esc(p.label)}</text></g>`}
+export function routePath(points){
+ const p=Array.from({length:points.length/2},(_,i)=>[points[i*2],points[i*2+1]]);
+ let path=`M${p[0].join(' ')}`;
+ for(let i=1;i<p.length-1;i++){
+  const a=p[i-1],c=p[i],b=p[i+1],l1=Math.hypot(c[0]-a[0],c[1]-a[1]),l2=Math.hypot(b[0]-c[0],b[1]-c[1]);
+  if(!l1||!l2){path+=` L${c.join(' ')}`;continue}
+  const r=Math.min(20,l1/3,l2/3),entry=[c[0]-(c[0]-a[0])*r/l1,c[1]-(c[1]-a[1])*r/l1],exit=[c[0]+(b[0]-c[0])*r/l2,c[1]+(b[1]-c[1])*r/l2];
+  path+=` L${entry.join(' ')} Q${c.join(' ')} ${exit.join(' ')}`;
+ }
+ return path+` L${p.at(-1).join(' ')}`;
+}
+function person(p){
+ const defender=p.role==='defender';
+ return `<circle r="22" fill="#000" opacity=".15" cy="3"/><circle r="19" fill="${defender?'#faf8f2':'#f3aa5b'}" stroke="${defender?'#a9b9c4':'#fff0d5'}" stroke-width="2"/><text y="5" text-anchor="middle" font-size="14" font-weight="700" fill="#17232d" font-family="Arial">${esc(p.label)}</text>`;
+}
 function body(g,id,animated){
  const pose=g.pose||'stand',low=['dribble','cross','between','behind','two-balls','defend','squat','inout','vdribble','pushpull','wrap'].includes(pose),head=low?150:115,hip=low?305:290;
  const arms=pose==='wrists'?'M280 200L230 255L260 270 M320 200L370 255L340 270':pose==='shoot'?'M280 210L250 140L285 105 M320 210L340 140L315 100':pose==='defend'?'M280 220L215 195L160 220 M320 220L385 195L440 220':pose==='balance'?'M280 190L230 235 M320 190L365 235':'M280 220L245 255L210 280 M320 220L355 255L390 280';
@@ -32,13 +45,13 @@ export function diagramFor(d,step=-1,context='detail'){
  contents+=index>1&&animated?'<circle r="12" fill="#f68a21"><animateMotion dur="3s" repeatCount="indefinite" path="M150 300L350 402L450 300"/></circle>':'<circle cx="150" cy="300" r="12" fill="#f68a21"/>';
  }else{
  if(surface==='court'||surface==='full'){
- contents=`<rect x="30" y="30" width="540" height="504" rx="4" fill="url(#${id}-wood)" stroke="#fff5dd" stroke-width="3"/><g clip-path="url(#${id}-clip)" opacity=".17" stroke="#896230">${Array.from({length:32},(_,i)=>`<path d="M30 ${35+i*16}H570"/>`).join('')}</g><g fill="none" stroke="#fff9e8" stroke-width="3"><path d="M212 30V239H388V30 M244 30V170H356V30 M265 56H335"/><circle cx="300" cy="73" r="14" stroke="#f47a28" stroke-width="4"/><path d="M212 239 A88 88 0 0 0 388 239" stroke-dasharray="9 6"/><path d="M212 239 A88 88 0 0 1 388 239"/><path d="M55 30V110 A246 246 0 0 0 545 110V30"/></g>`;
- if(surface==='full')contents=`<rect x="30" y="30" width="540" height="504" fill="url(#${id}-wood)" stroke="#fff5dd" stroke-width="3"/><g fill="none" stroke="#fff9e8" stroke-width="3"><path d="M30 282H570 M220 30V140H380V30 M220 534V424H380V534 M270 55H330 M270 510H330"/><circle cx="300" cy="282" r="60"/><circle cx="300" cy="73" r="12" stroke="#f47a28"/><circle cx="300" cy="515" r="12" stroke="#f47a28"/></g>`;
+ contents=`<rect x="30" y="30" width="540" height="504" rx="4" fill="#192b36" stroke="#7c929f" stroke-width="2"/><g clip-path="url(#${id}-clip)" opacity=".035" stroke="#dde7ed">${Array.from({length:32},(_,i)=>`<path d="M30 ${35+i*16}H570"/>`).join('')}</g><g fill="none" stroke="#a4b5bf" stroke-width="2"><path d="M212 30V239H388V30 M244 30V170H356V30 M265 56H335"/><circle cx="300" cy="73" r="14" stroke="#f3aa5b" stroke-width="3"/><path d="M212 239 A88 88 0 0 0 388 239" stroke-dasharray="9 6"/><path d="M212 239 A88 88 0 0 1 388 239"/><path d="M55 30V110 A246 246 0 0 0 545 110V30"/></g>`;
+ if(surface==='full')contents=`<rect x="30" y="30" width="540" height="504" fill="#192b36" stroke="#7c929f" stroke-width="2"/><g fill="none" stroke="#a4b5bf" stroke-width="2"><path d="M30 282H570 M220 30V140H380V30 M220 534V424H380V534 M270 55H330 M270 510H330"/><circle cx="300" cy="282" r="60"/><circle cx="300" cy="73" r="12" stroke="#f47a28"/><circle cx="300" cy="515" r="12" stroke="#f47a28"/></g>`;
  }else contents='<rect x="55" y="65" width="490" height="440" rx="8" fill="#142f3c" stroke="#688392" stroke-width="2"/><path d="M300 65V505" stroke="#344e5a" stroke-dasharray="9 12"/>';
  if(g.wall)contents+='<rect x="80" y="125" width="440" height="20" fill="#627d8b"/><text x="300" y="110" fill="#c4d8e3" text-anchor="middle" font-size="15">SIENA</text>';
  contents+=(g.spots||[]).map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="19" fill="#102531" stroke="#efac35" stroke-width="3"/><text x="${x}" y="${y+5}" fill="#ffd27a" text-anchor="middle" font-size="15">${i+1}</text>`).join('');
- contents+=(g.cones||[]).map(c=>`<g transform="translate(${c.x} ${c.y})"><path d="M0 -13L11 10H-11Z" fill="#ff9b23" stroke="#a65a13" stroke-width="2"/><path d="M-6 0H6" stroke="#ffe3a6" stroke-width="3"/><rect x="-16" y="-38" width="32" height="20" rx="7" fill="#102632"/><text y="-23" fill="#fff" text-anchor="middle" font-size="12" font-weight="bold">${esc(c.label)}</text></g>`).join('');
- contents+=g.routes.map((r,i)=>`<path d="${routePath(r.points)}" fill="none" stroke="#09283a" stroke-width="9" opacity=".8"/><path d="${routePath(r.points)}" fill="none" stroke="${r.type==='shot'||r.type==='pass'?'#ffd04c':'#119eed'}" stroke-width="4" ${r.type==='shot'||r.type==='pass'?'stroke-dasharray="8 7"':''} stroke-linejoin="round" stroke-linecap="round" marker-end="url(#${id}-${r.type==='shot'||r.type==='pass'?'ball':'move'})"/>`).join('');
+ contents+=(g.cones||[]).map(c=>`<g transform="translate(${c.x} ${c.y})"><path d="M0 -12L10 9H-10Z" fill="#f3aa5b" stroke="#f8d7ae" stroke-width="1.2"/><rect x="-18" y="-39" width="36" height="22" rx="11" fill="#0d1a23" stroke="#6d8797" stroke-width="1"/><text y="-23" fill="#f4e9d9" text-anchor="middle" font-size="14" font-weight="bold">${esc(c.label)}</text></g>`).join('');
+ contents+=g.routes.map((r,i)=>`<path d="${routePath(r.points)}" fill="none" stroke="#07131a" stroke-width="7" opacity=".35"/><path d="${routePath(r.points)}" fill="none" stroke="${r.type==='shot'||r.type==='pass'?'#f7c891':'#83bed9'}" stroke-width="3.5" ${r.type==='shot'||r.type==='pass'?'stroke-dasharray="8 7"':''} stroke-linejoin="round" stroke-linecap="round" marker-end="url(#${id}-${r.type==='shot'||r.type==='pass'?'ball':'move'})"/>`).join('');
  const ballRoutes=g.routes.filter(r=>r.type==='shot'||r.type==='pass');
  contents+=g.actors.map((p,i)=>{
  const r=g.routes.find(r=>r.actor===i&&['move','dribble'].includes(r.type));
@@ -47,16 +60,16 @@ export function diagramFor(d,step=-1,context='detail'){
  const attached=(g.ball&&i===(g.ballActor??0))||(g.ballActor===i)||g.ballAll||r?.type==='dribble';
  const hasRelease=ballRoutes.some(route=>route.type==='shot');
  const carry=attached&&(!ballRoutes.length||r?.type==='dribble');
- return `<g transform="translate(${at[0]} ${at[1]})"><g>${r&&animated?`<animateMotion path="${routePath(relative)}" dur="5s" keyPoints="0;1;1" keyTimes="0;.65;1" calcMode="linear" repeatCount="indefinite"/>`:''}${person(p)}${carry&&(animated||!hasRelease)?`<circle cx="22" cy="-12" r="9" fill="#ff9325" stroke="#a45717" stroke-width="2">${hasRelease&&animated?'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.649;.65;1" dur="5s" repeatCount="indefinite"/>':''}</circle>`:''}</g></g>`;
+ return `<g transform="translate(${at[0]} ${at[1]})"><g>${r&&animated?`<animateMotion path="${routePath(relative)}" dur="5s" keyPoints="0;1;1" keyTimes="0;.65;1" calcMode="linear" repeatCount="indefinite"/>`:''}${person(p)}${carry&&(animated||!hasRelease)?`<circle cx="22" cy="-12" r="9" fill="#ef9f51" stroke="#58371d" stroke-width="2">${hasRelease&&animated?'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.649;.65;1" dur="5s" repeatCount="indefinite"/>':''}</circle>`:''}</g></g>`;
  }).join('');
- contents+=(g.balls||[]).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="10" fill="#ff9325" stroke="#a45717" stroke-width="2"/>`).join('');
+ contents+=(g.balls||[]).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="10" fill="#ef9f51" stroke="#58371d" stroke-width="2"/>`).join('');
  contents+=ballRoutes.map((r,i)=>{
- if(!animated)return `<circle cx="${r.points[0]+22}" cy="${r.points[1]-12}" r="9" fill="#ff9325" stroke="#a45717" stroke-width="2"/>`;
+ if(!animated)return `<circle cx="${r.points[0]+22}" cy="${r.points[1]-12}" r="9" fill="#ef9f51" stroke="#58371d" stroke-width="2"/>`;
  const start=ballRoutes.length>1&&d.id!=='knockout'?(i===0?.05:.65):g.routes.some(r=>r.type==='dribble')?.65:.1;
  const end=ballRoutes.length>1&&d.id!=='knockout'?(i===0?.3:.9):.9;
  const before=Math.max(0,start-.001),after=Math.min(1,end+.001);
- return `<circle r="9" fill="#ff9325" stroke="#a45717" stroke-width="2" opacity="0"><animateMotion dur="5s" path="${routePath(r.points)}" keyPoints="0;0;1;1" keyTimes="0;${start};${end};1" calcMode="linear" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;${before};${start};${end};${after};1" dur="5s" repeatCount="indefinite"/></circle>`;
+ return `<circle r="9" fill="#ef9f51" stroke="#58371d" stroke-width="2" opacity="0"><animateMotion dur="5s" path="${routePath(r.points)}" keyPoints="0;0;1;1" keyTimes="0;${start};${end};1" calcMode="linear" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;${before};${start};${end};${after};1" dur="5s" repeatCount="indefinite"/></circle>`;
  }).join('');
  }
- return `<svg class="court-svg precise-guide" viewBox="0 0 600 560" role="img" aria-label="${esc(title)}" data-exercise="${d.id}" data-frame="${index}"><title>${esc(title)}</title><defs><linearGradient id="${id}-wood" x2=".7" y2="1"><stop stop-color="#e7bd7d"/><stop offset="1" stop-color="#c99b5f"/></linearGradient><clipPath id="${id}-clip"><rect x="30" y="30" width="540" height="504"/></clipPath>${[['move','#119eed'],['ball','#ffd04c']].map(([name,color])=>`<marker id="${id}-${name}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10" fill="${color}"/></marker>`).join('')}</defs>${contents}</svg>`;
+ return `<svg class="court-svg precise-guide" viewBox="0 0 600 560" role="img" aria-label="${esc(title)}" data-exercise="${d.id}" data-frame="${index}"><title>${esc(title)}</title><defs><clipPath id="${id}-clip"><rect x="30" y="30" width="540" height="504"/></clipPath>${[['move','#83bed9'],['ball','#f7c891']].map(([name,color])=>`<marker id="${id}-${name}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10" fill="${color}"/></marker>`).join('')}</defs>${contents}</svg>`;
 }

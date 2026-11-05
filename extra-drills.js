@@ -5,11 +5,11 @@ export const extraDrills = [
     "category": "shooting",
     "title": "5–4–3–2–1",
     "min": 1,
-    "tag": "2 DIVSOĻI + 2 METIENI",
-    "tip": "Sākums soda līnijas kreisajā sānā. Pēc konusa 3 dodies uz 1; pie konusa 2 nemet.",
+    "tag": "2 DIVSOĻI + 3 METIENI",
+    "tip": "Sāc soda līnijas kreisajā sānā. Pēc abiem divsoļiem metienu secība: stūris 3 → stūris 2 → augša 1.",
     "pattern": "shot",
     "scene": "countdown",
-    "reference": "Lietotāja attēla maršruts bez pārsvītrotā posma",
+    "reference": "Lietotāja precizētā secība: divi divsoļi, tad 3 → 2 → 1",
     "equipment": "4 konusi un 1 bumba"
   },
   {

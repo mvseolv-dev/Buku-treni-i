@@ -17,14 +17,16 @@ export const photoDrills = [
       "exercise": "Calf_Stretch_Hands_Against_Wall",
       "frames": [
         0,
-        1,
-        1,
+        0,
+        0,
         0
       ],
       "labels": [
-        "Sākuma pozīcija",
-        "Stiepšanās pozīcija"
-      ]
+        "Stiepšanās poza",
+        "Stiepšanās poza"
+      ],
+      "kind": "photo",
+      "cover": 0
     },
     "prescription": "15–20 s katrai pusei · 2 apļi",
     "equipment": "Siena"
@@ -46,15 +48,17 @@ export const photoDrills = [
     "media": {
       "exercise": "Kneeling_Hip_Flexor",
       "frames": [
-        0,
         1,
         1,
-        0
+        1,
+        1
       ],
       "labels": [
-        "Sākuma pozīcija",
-        "Stiepšanās pozīcija"
-      ]
+        "Stiepšanās poza",
+        "Stiepšanās poza"
+      ],
+      "kind": "photo",
+      "cover": 1
     },
     "prescription": "15–20 s katrai pusei · 2 apļi",
     "equipment": "Paklājiņš"
@@ -76,15 +80,17 @@ export const photoDrills = [
     "media": {
       "exercise": "Seated_Floor_Hamstring_Stretch",
       "frames": [
-        0,
-        0,
+        1,
+        1,
         1,
         1
       ],
       "labels": [
-        "Sākuma pozīcija",
-        "Stiepšanās pozīcija"
-      ]
+        "Stiepšanās poza",
+        "Stiepšanās poza"
+      ],
+      "kind": "photo",
+      "cover": 1
     },
     "prescription": "15–20 s katrai pusei · 2 apļi",
     "equipment": "Paklājiņš"
@@ -106,15 +112,17 @@ export const photoDrills = [
     "media": {
       "exercise": "Shoulder_Stretch",
       "frames": [
-        0,
+        1,
         1,
         1,
         1
       ],
       "labels": [
-        "Sākuma pozīcija",
-        "Stiepšanās pozīcija"
-      ]
+        "Stiepšanās poza",
+        "Stiepšanās poza"
+      ],
+      "kind": "photo",
+      "cover": 1
     },
     "prescription": "15–20 s katrai pusei · 2 apļi",
     "equipment": "Bez inventāra"
@@ -136,15 +144,17 @@ export const photoDrills = [
     "media": {
       "exercise": "Standing_Lateral_Stretch",
       "frames": [
-        0,
-        0,
+        1,
+        1,
         1,
         1
       ],
       "labels": [
-        "Sākuma pozīcija",
-        "Stiepšanās pozīcija"
-      ]
+        "Stiepšanās poza",
+        "Stiepšanās poza"
+      ],
+      "kind": "photo",
+      "cover": 1
     },
     "prescription": "15–20 s katrai pusei · 2 apļi",
     "equipment": "Bez inventāra"
@@ -166,15 +176,17 @@ export const photoDrills = [
     "media": {
       "exercise": "Standing_Elevated_Quad_Stretch",
       "frames": [
-        0,
-        0,
+        1,
+        1,
         1,
         1
       ],
       "labels": [
-        "Sākuma pozīcija",
-        "Stiepšanās pozīcija"
-      ]
+        "Stiepšanās poza",
+        "Stiepšanās poza"
+      ],
+      "kind": "photo",
+      "cover": 1
     },
     "prescription": "15–20 s katrai pusei · 2 apļi",
     "equipment": "Soliņš un paklājiņš"

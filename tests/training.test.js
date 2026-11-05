@@ -33,18 +33,20 @@ test('Every instruction has a matching human photograph or the exact same scene 
   }
  }
 });
-test('54321 matches user reference: four cones, left start, two layups, corner 3 then top 1, no corner 2 shot',()=>{
+test('54321 follows latest correction: left start, two layups, then shots at 3, 2 and 1',()=>{
  const d=drills.find(d=>d.id==='countdown'),g=guides.countdown;
- assert.equal(d.steps.length,5);assert.equal(d.source,undefined);assert.equal(g[0].cones.length,4);
+ assert.equal(d.steps.length,6);assert.equal(d.source,undefined);assert.equal(g[0].cones.length,4);
  assert.deepEqual(g[0].actors.map(p=>[p.x,p.y]),[[235,239]]);
  assert.deepEqual(g[0].cones.map(c=>[c.label,c.x,c.y]),[['0',300,239],['1',300,370],['2',525,125],['3',75,125]]);
  assert.deepEqual(g[1].routes.find(r=>r.type==='shot').points.slice(0,2),[270,100]);
  assert.deepEqual(g[2].routes.find(r=>r.type==='shot').points.slice(0,2),[330,100]);
  assert.ok(g[2].routes.find(r=>r.type==='dribble').points.some((n,i)=>i%2===1&&n>239));
  assert.deepEqual(g[3].routes.find(r=>r.type==='shot').points.slice(0,2),[75,150]);
- assert.deepEqual(g[4].routes.find(r=>r.type==='shot').points.slice(0,2),[300,390]);
- assert.ok(g.every(s=>s.routes.filter(r=>r.type==='shot').every(r=>r.points[0]<500)));
- assert.equal(g.flatMap(s=>s.routes).filter(r=>r.type==='shot').length,4);
+ assert.deepEqual(g[4].routes.find(r=>r.type==='shot').points.slice(0,2),[525,150]);
+ assert.deepEqual(g[5].routes.find(r=>r.type==='shot').points.slice(0,2),[300,390]);
+ assert.deepEqual(g[4].actors.map(p=>[p.x,p.y]),[[75,150]]);
+ assert.deepEqual(g[5].actors.map(p=>[p.x,p.y]),[[525,150]]);
+ assert.equal(g.flatMap(s=>s.routes).filter(r=>r.type==='shot').length,5);
 });
 test('Slalom shows four cones; two-ball work and defensive shell have correct setups',()=>{
  assert.equal(guides.slalom[0].cones.length,4);
@@ -59,4 +61,9 @@ test('Card and detail diagram identifiers cannot collide',()=>{
 test('Full sessions end with stretching and selection rotates without mutating the library',()=>{
  for(const duration of [30,45,60,90]){const p=makePlan(1,duration,'all');assert.equal(p.at(-1).category,'stretching');assert.equal(p.at(-1).minutes,5);assert.ok(p.length<=8)}
  const before=drills.map(d=>d.id);assert.notDeepEqual(makePlan(4,30,'shooting',()=>0).map(d=>d.id),makePlan(4,30,'shooting',()=>.99).map(d=>d.id));assert.deepEqual(drills.map(d=>d.id),before);
+});
+
+test('Every stretching exercise has a verified local posture photo, used consistently rather than a fake start/end pair',()=>{
+ const stretching=drills.filter(d=>d.category==='stretching');assert.equal(stretching.length,6);
+ for(const d of stretching){assert.equal(d.media.kind,'photo');assert.ok(Number.isInteger(d.media.cover));assert.ok(d.media.frames.every(f=>f===d.media.cover));assert.ok(existsSync(new URL(`../assets/exercises/${d.media.exercise}-${d.media.cover}.jpg`,import.meta.url)))}
 });
