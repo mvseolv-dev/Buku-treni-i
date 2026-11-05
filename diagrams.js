@@ -21,6 +21,7 @@ export function diagramFor(d,step=-1){
  lines=selected.map(p=>[...p,150,38]);
  }
  const path=a=>'M'+a.slice(0,2).join(' ')+' '+Array.from({length:a.length/2-1},(_,i)=>'L'+a.slice(2+i*2,4+i*2).join(' ')).join(' ');
+ if(!active)lines=routes;
  const ballStart=key==='twoBalls'?[[130,140],[170,140]]:key==='knockout'?positions.slice(0,2):['S','D','P'].includes(kind)?[positions[0]]:[];
  let drawing;
  if(body){

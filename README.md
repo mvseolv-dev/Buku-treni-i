@@ -35,7 +35,7 @@ npm run dev
 
 19 metienu, 10 dribla, 8 aizsardzības, 6 iesildīšanās, 6 fiziskās sagatavotības un 6 stiepšanās vingrinājumi. Pievienoti Knockout, Mikan, HORSE, Apkārt pasaulei, piespēļu un metienu varianti. Meklēšana darbojas kopā ar kategoriju un minimālā spēlētāju skaita filtriem. Treniņa plāns izvēlas 4–8 vingrinājumus atkarībā no ilguma un dažādo izvēli katrā ģenerēšanā.
 
-Astoņiem fiziskajiem/stiepšanās vingrinājumiem ir īstu cilvēku foto demonstrējumi no Free Exercise DB ar piesaisti izpildes soļiem. Attēli un licence glabājas lokāli. Pārējiem vingrinājumiem redzams izpildes ceļvedis; komandas vingrinājumiem laukuma shēma atverama atsevišķi. Tie nav nepārtraukti GIF vai video demonstrējumi. Pilns treniņš noslēdzas ar piecām stiepšanās minūtēm.
+Astoņiem fiziskajiem/stiepšanās vingrinājumiem ir īstu cilvēku foto demonstrējumi no Free Exercise DB ar piesaisti izpildes soļiem. Attēli un licence glabājas lokāli. Pārējiem 47 vingrinājumiem shēma ir redzama uzreiz gan kartītē, gan vingrinājuma skatā līdzās izpildes ceļvedim. Shēmas nav paslēptas izvērsnē. Tie nav nepārtraukti GIF vai video demonstrējumi. Pilns treniņš noslēdzas ar piecām stiepšanās minūtēm.
 
 Avotu lasīšanu šajā vidē bloķēja tīkla politika. Jaunie teksti ir patstāvīgi BUKI treniņu varianti. Lietotāja ieteiktā Nike 5–4–3–2–1 saite ir pievienota kā nepārbaudīts saistītais raksts; BUKI variants nav apgalvojums par Nike raksta noteikumiem. Izpētes statuss un saites ir `SOURCES.md`.
 
