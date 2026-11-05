@@ -13,8 +13,8 @@ test('All player counts, durations and focuses produce eligible plans with exact
   assert.equal(new Set(p.map(d=>d.id)).size,p.length);if(focus!=='all')assert.ok(p.some(d=>d.category===focus));
  }
 });
-test('100 distinct exercises include usable instructions and player constraints',()=>{
- assert.equal(drills.length,100);assert.equal(new Set(drills.map(d=>d.id)).size,100);
+test('109 distinct exercises include usable instructions and player constraints',()=>{
+ assert.equal(drills.length,109);assert.equal(new Set(drills.map(d=>d.id)).size,109);
  for(const d of drills){assert.ok(d.steps.length>=3,d.id);assert.ok(d.steps.every(s=>s.length>=20&&s.length<210),d.id);assert.ok(d.min>=1&&d.min<=20,d.id)}
  assert.equal(drills.find(d=>d.id==='knockout').min,3);assert.equal(drills.find(d=>d.id==='shell').min,8);
 });
@@ -72,7 +72,7 @@ test('Every stretching exercise has a verified local posture photo, used consist
 test('Every participant is assigned exactly once in every supported exercise and group size',()=>{
  for(const d of drills)for(let n=1;n<=20;n++){
   const o=participationFor(d,n);if(!o)continue;
-  const members=o.groups.flatMap(g=>g.members);assert.equal(members.length,n,`${d.id}:${n}`);assert.deepEqual(members.map(m=>m.player),Array.from({length:n},(_,i)=>i+1));assert.ok(members.every(m=>m.role.length>4));assert.equal(o.waiting,0);assert.equal(o.active,n);
+  const members=o.groups.flatMap(g=>g.members);assert.equal(members.length,n,`${d.id}:${n}`);assert.deepEqual(members.map(m=>m.player),Array.from({length:n},(_,i)=>i+1));assert.ok(members.every(m=>m.role.length>4));assert.equal(o.waiting+o.active,n);if(o.kind!=='free-throws')assert.equal(o.waiting,0);
  }
 });
 test('Four players work in two pairs; fixed three-person exercises are excluded',()=>{
@@ -101,4 +101,24 @@ test('The manifest and browser icons reference the supplied team logo',()=>{
 
 test('A drill with a defined pair format does not acquire an invented third role',()=>{
  const paired=drills.find(d=>d.id==='give-go');assert.equal(participationFor(paired,5),null);assert.equal(participationFor(paired,3),null);assert.deepEqual(participationFor(paired,4).groups.map(g=>g.size),[2,2]);
+});
+
+import {measurePull} from '../pull-refresh.js';
+test('Requested games remain available with explicitly labeled rotation',()=>{
+ for(const id of ['countdown','knockout','horse','partner-21']){const d=drills.find(d=>d.id===id),o=participationFor(d,4,{baskets:1,balls:2},{allowRotation:true});assert.ok(o,id);assert.equal(o.groups.flatMap(g=>g.members).length,4);assert.equal(o.active+o.waiting,4);assert.ok(o.waiting>0);}
+});
+test('Two columns use one hoop, two balls and all four players in the continuous cycle',()=>{
+ for(const d of drills.filter(d=>d.teamFormat==='columns')){const o=participationFor(d,4,{baskets:1,balls:2});assert.ok(o,d.id);assert.equal(o.active,4);assert.equal(o.waiting,0);assert.deepEqual(o.requirements,{baskets:1,balls:2});assert.equal(participationFor(d,4,{baskets:1,balls:1}),null);assert.equal(participationFor(d,6,{baskets:1,balls:2}),null);const r=participationFor(d,6,{baskets:1,balls:2},{allowRotation:true});assert.equal(r.waiting,2);}
+ const g=guides['team-midrange'];assert.ok(g[3].routes.some(r=>r.type==='pass'&&r.points[0]<300&&r.points[2]>300));assert.ok(g[3].routes.some(r=>r.type==='pass'&&r.points[0]>300&&r.points[2]<300));
+});
+test('Ten free-throw attempts are inserted between main drills with unique entry identities and exact time budgets',()=>{
+ for(const players of [1,4,5,12,20])for(const duration of [30,45,60,90]){
+  const p=makePlan(players,duration,'shooting',()=>.5,{baskets:20,balls:40},{includeGames:true,freeThrows:true});
+  assert.equal(p.reduce((s,d)=>s+d.minutes,0),duration);assert.equal(new Set(p.map(d=>d.entryKey)).size,p.length);
+  for(let i=2;i<p.length;i+=2){assert.equal(p[i].id,'free-throws-10');assert.equal(p[i].shotsPerPlayer,10);assert.equal(p[i].organization.players,players)}
+  assert.ok(p.every(d=>d.minutes>=2));
+ }
+});
+test('Pull refresh arms only after a sufficient downward vertical drag',()=>{
+ const start={x:100,y:10};assert.equal(measurePull(start,{x:100,y:70}).armed,false);assert.equal(measurePull(start,{x:100,y:160}).armed,true);assert.equal(measurePull(start,{x:300,y:160}).armed,false);assert.equal(measurePull(start,{x:100,y:0}).armed,false);
 });

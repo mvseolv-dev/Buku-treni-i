@@ -12,8 +12,8 @@ export function routePath(points){
  return path+` L${p.at(-1).join(' ')}`;
 }
 function person(p){
- const defender=p.role==='defender';
- return `<circle r="22" fill="#000" opacity=".15" cy="3"/><circle r="19" fill="${defender?'#faf8f2':'#f3aa5b'}" stroke="${defender?'#a9b9c4':'#fff0d5'}" stroke-width="2"/><text y="5" text-anchor="middle" font-size="14" font-weight="700" fill="#17232d" font-family="Arial">${esc(p.label)}</text>`;
+ const defender=p.role==='defender',waiting=p.role==='waiting';
+ return `<circle r="22" fill="#000" opacity=".15" cy="3"/><circle r="19" fill="${waiting?'#46545d':defender?'#faf8f2':'#f3aa5b'}" stroke="${defender?'#a9b9c4':'#fff0d5'}" stroke-width="2"/><text y="5" text-anchor="middle" font-size="14" font-weight="700" fill="${waiting?'#d3dde4':'#17232d'}" font-family="Arial">${esc(p.label)}</text>`;
 }
 export function bodyPhotoFor(g){
  const map={stand:['Shoulder_Stretch',0,'Sagatavošanās poza'],wrists:['Wrist_Circles',0,'Plaukstu kustību piemērs'],balance:['Single-Leg_Hop_Progression',0,'Līdzsvars uz vienas kājas'],squat:['Bodyweight_Squat',1,'Saliektu kāju pozas piemērs']};
@@ -55,6 +55,12 @@ export function diagramFor(d,step=-1,context='detail'){
  if(d.organization?.kind==='shared'&&g.actors.length){
   const members=d.organization.groups[0].members,positions=[[170,350],[420,350],[300,180],[300,430],[120,180],[480,180]];
   g={...g,actors:members.map((m,i)=>g.actors[i]?{...g.actors[i],label:String(m.player)}:{x:positions[i][0],y:positions[i][1],label:String(m.player),role:'player'})};
+ }
+ if(d.organization?.kind==='free-throws'&&d.organization.groups[0].size===1)g={...g,actors:g.actors.slice(0,1),routes:g.routes.filter(r=>r.type!=='pass'&&r.actor===0)};
+ if(d.organization?.kind==='rotation'&&index===0){
+  const members=d.organization.groups[0].members,actors=g.actors.slice(0,Math.min(members.length,5)).map((p,i)=>({...p,label:String(members[i].player),role:members[i].working?'player':'waiting'}));
+  while(actors.length<Math.min(members.length,5)){const i=actors.length;actors.push({x:d.id==='knockout'?300:530,y:d.id==='knockout'?255+i*60:330+i*45,label:String(members[i].player),role:'waiting'})}
+  g={...g,actors};
  }
  const id=`${d.id}-${context}-${step<0?'setup':'step-'+step}`,surface=g.surface||'court';
  const animated=context==='detail';

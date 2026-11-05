@@ -24,10 +24,29 @@ function shootingGroups(n){
  }
  return null;
 }
-export function participationFor(d,n,resources=null){
- if(!Number.isInteger(n)||n<1||n>20||n<d.min||waitingGames.has(d.id))return null;
+function rotatingOrganization(d,n,limits){
+ const isColumns=d.teamFormat==='columns',isFree=!!d.shotsPerPlayer;
+ const baskets=isColumns||d.id==='knockout'||d.id==='horse'||d.id==='partner-21'?1:Math.min(n,limits.baskets,limits.balls);
+ const balls=isColumns||d.id==='knockout'?2:baskets;
+ if(baskets<1||limits.baskets<baskets||limits.balls<balls)return null;
+ const count=isColumns||d.id==='knockout'||d.id==='horse'||d.id==='partner-21'?1:baskets;
+ let next=1,active=0;
+ const groups=Array.from({length:count},(_,i)=>{
+  const size=Math.floor(n/count)+(i<n%count?1:0);
+  const working=isColumns?Math.min(size,4):d.id==='knockout'?Math.min(size,2):isFree?Math.min(size,2):1;
+  active+=working;
+  return {number:i+1,size,members:Array.from({length:size},(_,j)=>({player:next++,role:isColumns?j<2?`Met no ${j===0?'kreisās':'labās'} kolonnas`:j<4?`Saņem ${j%2===0?'kreisajā':'labajā'} kolonnā; pēc metiena savāc savu bumbu`:`Gatavojas ${j%2===0?'kreisajā':'labajā'} kolonnā — īsa rotācija`:d.id==='knockout'?j<2?'Izpilda metienu ar savu bumbu':'Gatavojas rindā':isFree?j===0?'Met soda metienus':j===1?'Savāc un atgriež bumbu':'Gatavojas nākamajai sērijai':j===0?'Izpilda maršrutu vai metienu':'Startē pēc iepriekšējā spēlētāja',working:j<working}))};
+ });
+ return {players:n,kind:isColumns?'columns':isFree?'free-throws':'rotation',groups,active,waiting:n-active,summary:isColumns?`2 kolonnas · ${Math.ceil(n/2)} + ${Math.floor(n/2)}`:isFree?`Katram ${d.shotsPerPlayer} mēģinājumi`:`Sacensība ar rotāciju`,rotation:isColumns?'Met → savāc savu bumbu → piespēlē pretējai kolonnai → ej tās beigās. Mērķis ir kopīgs visai komandai.':isFree?'Pēc 2 mēģinājumiem mainiet metēju; turpiniet, līdz katram ir 10 mēģinājumi.':'Visi piedalās raundā pēc noteikumiem. Vienlaikus nemet visa grupa; pārējie gaida savu kārtu.',requirements:{baskets,balls}};
+}
+export function participationFor(d,n,resources=null,options={}){
+ if(!Number.isInteger(n)||n<1||n>20||n<d.min)return null;
  const limits=resources||{baskets:20,balls:40};
  if(!Number.isInteger(limits.baskets)||limits.baskets<0||!Number.isInteger(limits.balls)||limits.balls<0)return null;
+ if(d.teamFormat==='columns'){if(n>4&&!options.allowRotation)return null;return rotatingOrganization(d,n,limits)}
+ if(d.shotsPerPlayer)return rotatingOrganization(d,n,limits);
+ if(waitingGames.has(d.id)){return options.allowRotation?rotatingOrganization(d,n,limits):null}
+ if(d.id==='countdown'&&options.allowRotation&&n>limits.baskets)return rotatingOrganization(d,n,limits);
  let sizes,kind;
  if(d.id==='dribble-tag'){const count=Math.ceil(n/6);sizes=Array(count).fill(3);let extra=n-count*3;for(let i=0;i<count;i++){const add=Math.min(3,extra);sizes[i]+=add;extra-=add}kind='shared'}
  else if(d.id==='attack-closeout'){const size=n%4===0?4:n%3===0?3:0;if(!size)return null;sizes=Array(n/size).fill(size);kind='fixed'}
@@ -62,7 +81,10 @@ export function participationFor(d,n,resources=null){
  return {players:n,kind,groups,active:n,waiting:0,summary:groupLabel,rotation,requirements:{baskets,balls}};
 }
 export function formatFor(d){
- if(waitingGames.has(d.id))return 'Spēle ar gaidīšanu';
+ if(d.teamFormat==='columns')return '2 kolonnas · kopīgs mērķis';
+ if(d.shotsPerPlayer)return 'Katram 10 soda mēģinājumi';
+ if(waitingGames.has(d.id))return 'Spēle ar rotāciju';
+ if(d.id==='countdown')return 'Individuāls maršruts / rotācija';
  if(d.id==='attack-closeout')return '3 vai 4 spēlētāju grupās';
  if(d.id==='dribble-tag')return 'No 3; visi driblē';
  if(soloShot.has(d.id))return 'Individuāli; savs grozs katram';
@@ -71,8 +93,8 @@ export function formatFor(d){
  if(d.min===1)return 'Visi vienlaikus';
  return d.min===2?'Pāros':`${d.min} spēlētāju grupās`;
 }
-export function adaptForPlayers(d,n,resources=null){
- const organization=participationFor(d,n,resources);
+export function adaptForPlayers(d,n,resources=null,options={}){
+ const organization=participationFor(d,n,resources,options);
  if(!organization)return null;
  let steps=[...d.steps];
  if(organization.kind==='shooting'){

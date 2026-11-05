@@ -1,3 +1,4 @@
+import {teamGuides} from './team-drills.js';
 import {additionalGuides} from './additional-drills.js';
 // Each instruction and its visual are one record: they cannot drift into different orders.
 const P=(x,y,label='P',role='player')=>({x,y,label,role});
@@ -12,6 +13,7 @@ const dribble=(...p)=>R(p,'dribble');
 const floor={surface:'floor'};
 const cones=[C(300,239,'0'),C(300,370,'1'),C(525,125,'2'),C(75,125,'3')];
 export const guides={
+ ...teamGuides,
  ...additionalGuides,
  countdown:[
   S('Noliec 4 konusus: 0 — soda līnijas vidū, 1 — loka augšā, 2 un 3 — stūros. Sāc soda līnijas kreisajā sānā.',[P(235,239)],[],{cones,ball:true,caption:'Sākums soda līnijas kreisajā sānā.'}),

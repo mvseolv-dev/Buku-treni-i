@@ -4,7 +4,7 @@ Telefonam un datoram pielāgota tīmekļa lietotne latviešu valodā, kas darboj
 
 - Treniņa plāns 1–20 spēlētājiem ar 30, 45, 60 vai 90 minūšu ilgumu.
 - Iesildīšanās, metieni, dribls, aizsardzība un fiziskā sagatavotība.
-- 100 vingrinājumi ar soļiem un animētām SVG laukuma shēmām. Tās ir kustības virziena ilustrācijas, nevis video vai GIF demonstrācijas ar cilvēkiem.
+- 109 vingrinājumi ar soļiem un animētām SVG laukuma shēmām. Tās ir kustības virziena ilustrācijas, nevis video vai GIF demonstrācijas ar cilvēkiem.
 - Treniņa taimeris ar pauzi un pāreju uz nākamo vingrinājumu; plāna eksports teksta failā.
 - Izvēles saglabājas tikai konkrētās pārlūkprogrammas localStorage. Konts nav nepieciešams.
 - Lietotāja nodrošinātais BK BUKI logo. PDF pārvērsts caurspīdīgā PNG; oriģinālais logo nav pārveidots.
@@ -33,9 +33,9 @@ npm run dev
 
 ## Paplašinātā bibliotēka
 
-39 metienu, 22 dribla, 16 aizsardzības, 11 iesildīšanās, 6 fiziskās sagatavotības un 6 stiepšanās vingrinājumi. Pievienoti Knockout, Mikan, HORSE, Apkārt pasaulei, piespēļu un metienu varianti. Meklēšana darbojas kopā ar kategoriju un minimālā spēlētāju skaita filtriem. Treniņa plāns izvēlas 4–8 vingrinājumus atkarībā no ilguma un dažādo izvēli katrā ģenerēšanā.
+48 metienu, 22 dribla, 16 aizsardzības, 11 iesildīšanās, 6 fiziskās sagatavotības un 6 stiepšanās vingrinājumi. Pievienoti Knockout, Mikan, HORSE, Apkārt pasaulei, piespēļu un metienu varianti. Meklēšana darbojas kopā ar kategoriju un minimālā spēlētāju skaita filtriem. Treniņa plāns izvēlas 4–8 vingrinājumus atkarībā no ilguma un dažādo izvēli katrā ģenerēšanā.
 
-Astoņiem fiziskajiem/stiepšanās vingrinājumiem ir īstu cilvēku foto demonstrējumi no Free Exercise DB ar piesaisti izpildes soļiem. Attēli un licence glabājas lokāli. Pārējiem 92 vingrinājumiem shēma ir redzama uzreiz gan kartītē, gan vingrinājuma skatā līdzās izpildes ceļvedim. Shēmas nav paslēptas izvērsnē. Tie nav nepārtraukti GIF vai video demonstrējumi. Pilns treniņš noslēdzas ar piecām stiepšanās minūtēm.
+Astoņiem fiziskajiem/stiepšanās vingrinājumiem ir īstu cilvēku foto demonstrējumi no Free Exercise DB ar piesaisti izpildes soļiem. Attēli un licence glabājas lokāli. Pārējiem vingrinājumiem shēma ir redzama uzreiz gan kartītē, gan vingrinājuma skatā līdzās izpildes ceļvedim. Shēmas nav paslēptas izvērsnē. Tie nav nepārtraukti GIF vai video demonstrējumi. Pilns treniņš noslēdzas ar piecām stiepšanās minūtēm.
 
 Avotu lasīšanu šajā vidē bloķēja tīkla politika. Jaunie teksti ir patstāvīgi BUKI treniņu varianti. 5–4–3–2–1 seko lietotāja pēdējam precizējumam; iepriekšējais patvaļīgais skaitīšanas variants ir noņemts. Tam ir sākuma kadrs un pieci darbības posmi: divsolis no kreisās, apkārt konusam 0 un divsolis no labās, metiens pie stūra 3, metiens pie stūra 2, tad metiens loka augšā pie 1. Izpētes statuss un saites ir `SOURCES.md`.
 
@@ -61,10 +61,22 @@ Visiem sešiem stiepšanās vingrinājumiem ir vizuāli pārskatīts, lokāli gl
 
 `participation.js` katram plāna ierakstam veido pilnu darba sadalījumu. Katrs dalībnieks ir tieši vienā grupā ar konkrētu lomu; neviens netiek atstāts pāri. Četri dalībnieki pāru darbā veido 2 pārus. Pieci dalībnieki piemērotos metienu vingrinājumos veido 3 + 2 grupas. Fiksēti trīs cilvēku vingrinājumi četriem netiek atlasīti. “Uzbrūc aizsarga pieejai” atbalsta arī četru lomu variantu, pievienojot atsevišķu savācēju gan shēmā, gan darba sadalījumā. Individuālajiem nepārtrauktā maršruta metienu vingrinājumiem katram vajadzīgs savs grozs; savācēja loma tiem netiek izdomāta.
 
-Inventāra sadaļā norāda grozus un bumbas. Noklusējums: 2 grozi un bumbu skaits pēc spēlētāju skaita; pēc bumbu lauka manuālas maiņas saglabā reālo daudzumu. Plāns ņem vērā šos ierobežojumus un skaidri paziņo, ja izvēlētajam fokusam nav atbilstoša formāta. Rindas/izslēgšanas spēles paliek apskatāmas pilnajā bibliotēkā, bet netiek ieliktas plānā, kas sola vienlaicīgu iesaisti. Bibliotēkas filtrs sākotnēji seko plānotāja spēlētāju skaitam; visus formātus var ieslēgt atsevišķi. Plāna atvēršana un eksports saglabā tieši ģenerētās grupas, nevis atver sākotnējo vispārīgo piemēru.
+Inventāra sadaļā norāda grozus un bumbas. Noklusējums: 2 grozi un bumbu skaits pēc spēlētāju skaita; pēc bumbu lauka manuālas maiņas saglabā reālo daudzumu. Plāns ņem vērā šos ierobežojumus un skaidri paziņo, ja izvēlētajam fokusam nav atbilstoša formāta. Sacensības un rotācija pēc lietotāja jaunākā pieprasījuma ir ieslēdzamas plānā ar atsevišķu izvēli (saskarnē sākotnēji ieslēgta). Tiek skaidri norādīts izpildītāju un savu kārtu gaidošo skaits. Izslēdzot šo izvēli, rindas spēles netiek atlasītas. 5–4–3–2–1 un Knockout vienmēr atrodami atsevišķajā sacensību sadaļā. Bibliotēkas filtrs sākotnēji seko plānotāja spēlētāju skaitam; visus formātus var ieslēgt atsevišķi. Plāna atvēršana un eksports saglabā tieši ģenerētās grupas, nevis atver sākotnējo vispārīgo piemēru.
 
 Zilie ģeometriskie cilvēciņi izņemti. Piemērotām pozām izmantoti cilvēku foto; bumbas/pēdu kustībām — atsevišķas kustības shēmas, tās netiek sauktas par foto demonstrējumiem.
 
 ## Ikona telefonā
 
 Pārlūka ikona, Apple sākuma ekrāna ikona un `manifest.webmanifest` norāda uz lietotāja BUKI logo `assets/buki-logo.png`. Vecā B monogramma izņemta. Sākuma ekrāna pievienošana izmanto pārlūkprogrammas iespējas; bezsaistes darbība nav pievienota.
+
+## Komandas metieni un soda metienu pārtraukumi
+
+Sacensību sadaļā ir 16 pieejami izaicinājumi, arī 5–4–3–2–1 un Knockout. Astoņi jauni BUKI varianti aptver divas kolonnas, pustālos, trīnīšus, 50 kopīgus trāpījumus, 5 pozīciju pārus, divsoļu stafeti un atsevišķus pušu mērķus. Pamata plūsma ir metiens, savas bumbas savākšana, piespēle pretējai kolonnai un pāriešana tās beigās. Nepieciešams viens grozs un divas bumbas. Četriem ir četras nepārtrauktā cikla lomas; lielākām grupām īsā gaidīšana ir norādīta, nevis nosaukta par visu vienlaicīgu izpildi.
+
+Pustālo/trīnīšu/kopīgā metienu mērķa skaits ir maināms; teksts un nosaukums seko jaunajam skaitam. Fiksētu noteikumu izaicinājumiem mērķis nav brīvi maināms. Ir +1, punktu variantam +2, atsaukšana un atsevišķi kreisās/labās puses skaitītāji.
+
+Saskarnē sākotnēji ieslēgti 10 soda metienu mēģinājumi katram starp pamatvingrinājumiem metienu vai pilnajā plānā. Tie nav 10 obligāti trāpījumi vai 10 visai komandai. Katram dalībniekam ir mēģinājumu atzīmēšana līdz 10. Atkārtotajiem pārtraukumiem plānā ir atšķirīgas atslēgas un neatkarīgs progress. Plāna kopējais laiks joprojām ir precīzi izvēlētais ilgums; vajadzības gadījumā samazinās pamatvingrinājumu skaits.
+
+## Pārlāde ar vilkšanu
+
+Mobilajā skatā velc no lapas augšas uz leju un atlaid pēc norādes. Īsa, horizontāla vai dialoga iekšpusē sākta vilkšana lapu nepārlādē. Pirms pārlādes saglabājas plāns, skaitītāji un atlikušais laiks; pēc tās taimeris ir pauzē un to var turpināt. Izmanto sessionStorage šai pārlādei un localStorage izvēlēm; bezsaistes kešs netiek pievienots.

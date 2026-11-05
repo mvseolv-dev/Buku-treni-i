@@ -34,3 +34,7 @@ Knockout ir bez svešu bumbu aizsišanas. HORSE lieto piecu burtu izslēgšanu. 
 ## Papildu foto pozām
 
 Wrist_Circles/0.jpg (plaukstu apļošanas stāja) un Single-Leg_Hop_Progression/0.jpg (līdzsvars uz vienas kājas) no tās pašas Free Exercise DB bibliotēkas. Saglabāti oriģinālie ieraksti un attēli ar esošo Unlicense licenci. Tie izmantoti kā konkrētās pozas foto piemēri, nevis izdomāti nepārtraukti video. Sagatavošanās stājai izmantots lokāli esošais Shoulder_Stretch/0.jpg; pietupiena pozai — Bodyweight_Squat/1.jpg.
+
+## Komandas metienu varianti
+
+Astoņu jauno komandas metienu variantu pamats ir lietotāja šajā sarunā aprakstītais divu kolonnu cikls un BUKI formulēti kopīgu mērķu/pozīciju varianti. Netiek apgalvots, ka tie ir nolasīti no bloķētajām ārējām basketbola datubāzēm. 5–4–3–2–1 saglabā lietotāja precizēto 3 → 2 → 1 secību. Knockout saglabā skaidri aprakstītos rindas un izslēgšanas noteikumus; spēle ir atkal pieejama kā rotācijas formāts.
