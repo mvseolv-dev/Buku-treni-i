@@ -4,7 +4,7 @@ Telefonam un datoram pielāgota tīmekļa lietotne latviešu valodā, kas darboj
 
 - Treniņa plāns 1–20 spēlētājiem ar 30, 45, 60 vai 90 minūšu ilgumu.
 - Iesildīšanās, metieni, dribls, aizsardzība un fiziskā sagatavotība.
-- Deviņi vingrinājumi ar soļiem un animētām SVG laukuma shēmām. Tās ir kustības virziena ilustrācijas, nevis video vai GIF demonstrācijas ar cilvēkiem.
+- 49 vingrinājumi ar soļiem un animētām SVG laukuma shēmām. Tās ir kustības virziena ilustrācijas, nevis video vai GIF demonstrācijas ar cilvēkiem.
 - Treniņa taimeris ar pauzi un pāreju uz nākamo vingrinājumu; plāna eksports teksta failā.
 - Izvēles saglabājas tikai konkrētās pārlūkprogrammas localStorage. Konts nav nepieciešams.
 - Lietotāja nodrošinātais BK BUKI logo. PDF pārvērsts caurspīdīgā PNG; oriģinālais logo nav pārveidots.
@@ -29,7 +29,15 @@ npm run dev
 3. Darbplūsma `.github/workflows/pages.yml` pēc izmaiņām `main` zarā automātiski pārbauda un publicē `dist/`. Pēc Pages aktivizēšanas to var palaist arī manuāli sadaļā Actions.
 4. Publicētā vietne būs pieejama GitHub Pages norādītajā adresē. Projekta apakšceļu atbalstam izmantoti relatīvi resursu ceļi.
 
-Šī ir tīmekļa lietotne, nevis App Store vai Google Play pakotne. Šajā sesijā vietne ir pārbaudīta lokāli; publicēšana GitHub nav veikta.
+Šī ir tīmekļa lietotne, nevis App Store vai Google Play pakotne. Vietne tiek publicēta ar GitHub Actions pēc izmaiņu nosūtīšanas `main` zarā, ja repozitorijā ir aktivizēts Pages. Faktisko publicēšanas rezultātu pārbaudi Actions un Settings → Pages.
+
+## Paplašinātā bibliotēka
+
+19 metienu, 10 dribla, 8 aizsardzības, 6 iesildīšanās un 6 fiziskās sagatavotības vingrinājumi. Pievienoti Knockout, Mikan, HORSE, Apkārt pasaulei, piespēļu un metienu varianti. Meklēšana darbojas kopā ar kategoriju un minimālā spēlētāju skaita filtriem. Treniņa plāns izvēlas 4–8 vingrinājumus atkarībā no ilguma un dažādo izvēli katrā ģenerēšanā.
+
+Katram vingrinājumam ir piesaistīts sākuma izvietojums un katram apraksta solim noteikti kustības ceļi. Plankam, pietupieniem un līdzsvaram ir ķermeņa shēmas, nevis basketbola laukums. Shēmas ir ilustratīvas; tās nav video demonstrācijas vai biomehānikas analīze.
+
+Avotu lasīšanu šajā vidē bloķēja tīkla politika. Jaunie teksti ir patstāvīgi BUKI treniņu varianti. Lietotāja ieteiktā Nike 5–4–3–2–1 saite ir pievienota kā nepārbaudīts saistītais raksts; BUKI variants nav apgalvojums par Nike raksta noteikumiem. Izpētes statuss un saites ir `SOURCES.md`.
 
 ## Pārbaudes
 
