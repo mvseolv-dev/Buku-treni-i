@@ -1,41 +1,62 @@
-import {diagramConfigs} from './extra-drills.js';
-import {phaseRoutes,routeKinds} from './diagram-phases.js';
-const escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
-export function diagramFor(d,step=-1){
- const key=d.scene||d.id;const config=diagramConfigs[key];
- if(!config)throw new Error(`Missing diagram: ${d.id}`);
- const [kind,positions,routes]=config;
- const active=step>=0, phase=active?step:0;
- const id=`d-${d.id}-${active?'detail':'card'}`;
- const title=active?`${d.title}: ${d.steps[step]}`:`${d.title}: sākuma izvietojums`;
- const body=['squat','plank','balance'].includes(key);
- const shot=kind==='S';
- const routeType=a=>routeKinds[key]?.[routes.indexOf(a)]||(shot?'shot':kind==='P'?'pass':'move');
- const routeColor=a=>['shot','pass','ball'].includes(routeType(a))?'#e79853':'#c6f778';
- let points=positions;
- if(key==='countdown'&&active&&phase>0)points=phase===1?positions.slice(0,2):phase===2?positions.slice(2):positions;
- let lines=active?(phaseRoutes[key]?.[phase]||[]).map(i=>routes[i]):[];
- // Positional shooting uses the exact shooting point selected by the instruction.
- if(['spots','countdown','points'].includes(key)&&active&&phase>0){
- const selected=key==='countdown'?(phase===1?positions.slice(0,2):phase===2?positions.slice(2):[]):phase===1?positions:[];
- lines=selected.map(p=>[...p,150,38]);
+import {guides} from './guides.js';
+const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+export const routePath=points=>'M'+points.slice(0,2).join(' ')+Array.from({length:points.length/2-1},(_,i)=>' L'+points.slice(i*2+2,i*2+4).join(' ')).join('');
+function person(p){const blue=p.role==='defender'?'#f5f9fc':'#178bd1',ink=p.role==='defender'?'#126090':'#fff';return `<g stroke="#084d79" stroke-width="2"><path d="M-17 -3L-32 -14 M17 -3L32 9" stroke="${blue}" stroke-width="13" stroke-linecap="round"/><path d="M-8 15L-10 31 M8 15L15 28" stroke="${blue}" stroke-width="10" stroke-linecap="round"/><circle r="19" fill="${blue}"/><text y="5" text-anchor="middle" font-size="13" font-weight="800" fill="${ink}" stroke="none" font-family="Arial">${esc(p.label)}</text></g>`}
+function body(g,id,animated){
+ const pose=g.pose||'stand',low=['dribble','cross','between','behind','two-balls','defend','squat','inout','vdribble','pushpull','wrap'].includes(pose),head=low?150:115,hip=low?305:290;
+ const arms=pose==='wrists'?'M280 200L230 255L260 270 M320 200L370 255L340 270':pose==='shoot'?'M280 210L250 140L285 105 M320 210L340 140L315 100':pose==='defend'?'M280 220L215 195L160 220 M320 220L385 195L440 220':pose==='balance'?'M280 190L230 235 M320 190L365 235':'M280 220L245 255L210 280 M320 220L355 255L390 280';
+ const legs=pose==='skip'?'M285 290L270 410 M315 290L370 265L390 320':pose==='calfraise'?'M285 290L270 390L285 410 M315 290L335 390L350 410':pose==='balance'?'M285 290L270 400 M315 290L360 330L330 355':low?'M280 305L235 350L215 415 M320 305L365 350L385 415':'M285 290L270 410 M315 290L335 410';
+ let balls='';
+ if(g.ball||pose==='shoot'){
+ const points=pose==='shoot'?[300,90,300,90]:pose==='inout'?[395,290,340,330,395,395]:pose==='vdribble'?[395,290,300,400,345,290]:pose==='pushpull'?[390,270,420,405,360,270]:pose==='wrap'?[220,300,190,355,245,375,355,315,410,355,355,375,220,300]:pose==='cross'?[205,300,300,408,395,300]:pose==='between'?[210,285,300,400,365,320]:pose==='behind'?[205,285,300,320,395,285]:[390,275,390,410,390,275];
+ const data=g.reverse?[...Array.from({length:points.length/2},(_,i)=>points.slice(i*2,i*2+2)).reverse().flat()]:points;
+ const ball=(a,delay=0)=>`<circle cx="${a[0]}" cy="${a[1]}" r="13" fill="#f99124" stroke="#a64e0a" stroke-width="2">${animated?`<animateMotion path="${routePath(a.map((n,i)=>n-a[i%2]))}" dur="1.8s" begin="${delay}s" repeatCount="indefinite"/>`:""}</circle>`;
+ balls=pose==='two-balls'?ball([210,275,210,410,210,275])+ball([390,275,390,410,390,275],g.alternating?.9:0):ball(data);
  }
- const path=a=>'M'+a.slice(0,2).join(' ')+' '+Array.from({length:a.length/2-1},(_,i)=>'L'+a.slice(2+i*2,4+i*2).join(' ')).join(' ');
- if(!active)lines=routes;
- const ballStart=key==='twoBalls'?[[130,140],[170,140]]:key==='knockout'?positions.slice(0,2):['S','D','P'].includes(kind)?[positions[0]]:[];
- let drawing;
- if(body){
- const low=active&&phase===1;
- drawing=key==='plank'?`<path d="M55 140H245" stroke="#61734d"/><circle cx="85" cy="95" r="10"/><path d="M95 105L230 140 M110 109L110 140H85"/>`:key==='squat'?`<circle cx="150" cy="${low?65:40}" r="11"/><path d="M150 ${low?76:51}L${low?130:150} 110L${low?170:155} 125L165 165 M${low?130:150} 110L${low?110:140} 130L130 165 M150 ${low?85:65}L200 ${low?85:90}"/>`:`<circle cx="150" cy="45" r="11"/><path d="M150 56V110L140 165 M150 110L180 100L180 130 M150 72L110 100 M150 72L190 100"/>`;
- drawing=`<g fill="none" stroke="#c6f778" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">${drawing}</g><text x="150" y="192" text-anchor="middle" fill="#aebca0" font-size="10">${key==='plank'?'SKATS NO SĀNIEM':key==='squat'?'PIETUPIENS · SKATS NO SĀNIEM':'LĪDZSVARS · SKATS NO PRIEKŠAS'}</text>`;
+ const title=pose==='behind'?'POGATS NO MUGURPUSES':pose==='between'?'SKATS IESLĪPI NO PRIEKŠAS':'SKATS NO PRIEKŠAS';
+ const extras=pose==='wrists'?'<circle cx="260" cy="270" r="21" fill="none" stroke="#ffbb45" stroke-width="3" stroke-dasharray="6 4"/><circle cx="340" cy="270" r="21" fill="none" stroke="#ffbb45" stroke-width="3" stroke-dasharray="6 4"/>':'';
+ return `${extras}<path d="M100 430H500" stroke="#6d818b" stroke-width="2"/>${pose==='hop'||g.jump?'<path d="M300 380V460" stroke="#f9a42c" stroke-width="4" stroke-dasharray="7 5"/>':''}<g class="body-person" fill="none" stroke="#188dcc" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"><circle cx="300" cy="${head}" r="28" fill="#e4ba94" stroke="#102b3b" stroke-width="3"/><path d="M300 ${head+35}V${hip}" stroke-width="65"/><path d="${arms}"/><path d="${legs}"/></g>${balls}<text x="300" y="490" text-anchor="middle" fill="#bdd4e0" font-size="14">${title.replace('POGATS','SKATS')}</text>`;
+}
+export function diagramFor(d,step=-1,context='detail'){
+ const list=guides[d.id];if(!list)throw new Error(`Missing guide for ${d.id}`);
+ const index=step<0?0:step,raw=list[index];if(!raw)throw new Error(`Missing step ${d.id}:${step}`);
+ const g={...raw,cones:raw.cones??list[0].cones,spots:raw.spots??list[0].spots,wall:raw.wall??list[0].wall};
+ const id=`${d.id}-${context}-${step<0?'setup':'step-'+step}`,surface=g.surface||'court';
+ const animated=context==='detail';
+ const title=`${d.title} — ${g.text}`;
+ let contents='';
+ if(surface==='body')contents=body(g,id,animated);
+ else if(surface==='bounce'){
+ contents='<path d="M80 410H520" stroke="#abc2cc" stroke-width="3"/><g stroke="#168dd1" stroke-width="13" stroke-linecap="round"><circle cx="100" cy="235" r="20" fill="#dfb28d"/><path d="M100 265V340L80 405 M100 340L125 405 M100 280L150 300"/><circle cx="500" cy="235" r="20" fill="#dfb28d"/><path d="M500 265V340L480 405 M500 340L525 405 M500 280L450 300"/></g><text x="300" y="475" fill="#bdd4e0" text-anchor="middle" font-size="15">SKATS NO SĀNIEM · 3 m</text>';
+ if(index>0)contents+=`<path d="M150 300L350 402L450 300" fill="none" stroke="#ffc53d" stroke-width="4" stroke-dasharray="9 7"/><circle cx="350" cy="402" r="5" fill="#ffc53d"/><text x="350" y="435" fill="#ffc53d" text-anchor="middle" font-size="13">1 ATSITIENS</text>`;
+ contents+=index>1&&animated?'<circle r="12" fill="#f68a21"><animateMotion dur="3s" repeatCount="indefinite" path="M150 300L350 402L450 300"/></circle>':'<circle cx="150" cy="300" r="12" fill="#f68a21"/>';
  }else{
- drawing=`<g fill="none" stroke="#778966" stroke-width="1" opacity=".65"><path d="M25 185V15H275V185Z M105 15V85H195V15 M120 15V60H180V15"/><path d="M105 85 A45 45 0 0 0 195 85 M35 15V45 A115 115 0 0 0 265 45V15"/><circle cx="150" cy="38" r="9"/><path d="M135 26H165"/></g>`;
- if(['slalom','retreat','reaction'].includes(key)){const cones=key==='reaction'?[[75,115],[225,115]]:key==='retreat'?[[150,85]]:[[145,125],[110,90],[155,60]];drawing+=cones.map(([x,y])=>`<path d="M${x} ${y-6}l5 10h-10z" fill="#e79853"/>`).join('')}
- if(['shuttle','hops'].includes(key))drawing+=`<path d="${key==='hops'?'M150 100V170':'M75 115H140 M75 65H140'}" stroke="#e79853" stroke-dasharray="3 3"/>`;
- drawing+=lines.map((a,i)=>`<path id="${id}-path-${i}" d="${path(a)}" fill="none" stroke="${routeColor(a)}" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#${id}-${routeColor(a)==='#e79853'?'ball':'move'})"/>`).join('');
- drawing+=points.map(([x,y],i)=>{const defender=kind==='A'&&(key==='shell'?i>=4:key==='boxout'?i===1:key==='help'?i===2:key==='deny'?i===2:i===1||key==='slide');return `<circle cx="${x}" cy="${y}" r="10" fill="${defender?'#101c21':'#c6f778'}" stroke="${defender?'#86c6e6':'#131910'}" stroke-width="2"/><text x="${x}" y="${y+3}" text-anchor="middle" fill="${defender?'#86c6e6':'#15200e'}" font-size="9" font-family="Arial">${key==='shell'&&i>=4?i-3:i+1}</text>`}).join('');
- drawing+=ballStart.map(([x,y])=>`<circle cx="${x+13}" cy="${y-5}" r="4" fill="#e79853"/>`).join('');
- if(active&&phase>0&&lines.length){drawing+=lines.map((a,i)=>`<circle r="${['shot','pass','ball'].includes(routeType(a))?'4':'6'}" fill="${routeColor(a)}" opacity=".9"><animateMotion dur="3s" repeatCount="indefinite" path="${path(a)}"/></circle>`).join('')}
+ if(surface==='court'||surface==='full'){
+ contents=`<rect x="30" y="30" width="540" height="504" rx="4" fill="url(#${id}-wood)" stroke="#fff5dd" stroke-width="3"/><g clip-path="url(#${id}-clip)" opacity=".17" stroke="#896230">${Array.from({length:32},(_,i)=>`<path d="M30 ${35+i*16}H570"/>`).join('')}</g><g fill="none" stroke="#fff9e8" stroke-width="3"><path d="M212 30V239H388V30 M244 30V170H356V30 M265 56H335"/><circle cx="300" cy="73" r="14" stroke="#f47a28" stroke-width="4"/><path d="M212 239 A88 88 0 0 0 388 239" stroke-dasharray="9 6"/><path d="M212 239 A88 88 0 0 1 388 239"/><path d="M55 30V110 A246 246 0 0 0 545 110V30"/></g>`;
+ if(surface==='full')contents=`<rect x="30" y="30" width="540" height="504" fill="url(#${id}-wood)" stroke="#fff5dd" stroke-width="3"/><g fill="none" stroke="#fff9e8" stroke-width="3"><path d="M30 282H570 M220 30V140H380V30 M220 534V424H380V534 M270 55H330 M270 510H330"/><circle cx="300" cy="282" r="60"/><circle cx="300" cy="73" r="12" stroke="#f47a28"/><circle cx="300" cy="515" r="12" stroke="#f47a28"/></g>`;
+ }else contents='<rect x="55" y="65" width="490" height="440" rx="8" fill="#142f3c" stroke="#688392" stroke-width="2"/><path d="M300 65V505" stroke="#344e5a" stroke-dasharray="9 12"/>';
+ if(g.wall)contents+='<rect x="80" y="125" width="440" height="20" fill="#627d8b"/><text x="300" y="110" fill="#c4d8e3" text-anchor="middle" font-size="15">SIENA</text>';
+ contents+=(g.spots||[]).map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="19" fill="#102531" stroke="#efac35" stroke-width="3"/><text x="${x}" y="${y+5}" fill="#ffd27a" text-anchor="middle" font-size="15">${i+1}</text>`).join('');
+ contents+=(g.cones||[]).map(c=>`<g transform="translate(${c.x} ${c.y})"><path d="M0 -13L11 10H-11Z" fill="#ff9b23" stroke="#a65a13" stroke-width="2"/><path d="M-6 0H6" stroke="#ffe3a6" stroke-width="3"/><rect x="-16" y="-38" width="32" height="20" rx="7" fill="#102632"/><text y="-23" fill="#fff" text-anchor="middle" font-size="12" font-weight="bold">${esc(c.label)}</text></g>`).join('');
+ contents+=g.routes.map((r,i)=>`<path d="${routePath(r.points)}" fill="none" stroke="#09283a" stroke-width="9" opacity=".8"/><path d="${routePath(r.points)}" fill="none" stroke="${r.type==='shot'||r.type==='pass'?'#ffd04c':'#119eed'}" stroke-width="4" ${r.type==='shot'||r.type==='pass'?'stroke-dasharray="8 7"':''} stroke-linejoin="round" stroke-linecap="round" marker-end="url(#${id}-${r.type==='shot'||r.type==='pass'?'ball':'move'})"/>`).join('');
+ const ballRoutes=g.routes.filter(r=>r.type==='shot'||r.type==='pass');
+ contents+=g.actors.map((p,i)=>{
+ const r=g.routes.find(r=>r.actor===i&&['move','dribble'].includes(r.type));
+ const relative=r?r.points.map((n,j)=>n-(j%2?p.y:p.x)):null;
+ const at=!animated&&r?r.points.slice(-2):[p.x,p.y];
+ const attached=(g.ball&&i===(g.ballActor??0))||(g.ballActor===i)||g.ballAll||r?.type==='dribble';
+ const hasRelease=ballRoutes.some(route=>route.type==='shot');
+ const carry=attached&&(!ballRoutes.length||r?.type==='dribble');
+ return `<g transform="translate(${at[0]} ${at[1]})"><g>${r&&animated?`<animateMotion path="${routePath(relative)}" dur="5s" keyPoints="0;1;1" keyTimes="0;.65;1" calcMode="linear" repeatCount="indefinite"/>`:''}${person(p)}${carry&&(animated||!hasRelease)?`<circle cx="22" cy="-12" r="9" fill="#ff9325" stroke="#a45717" stroke-width="2">${hasRelease&&animated?'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.649;.65;1" dur="5s" repeatCount="indefinite"/>':''}</circle>`:''}</g></g>`;
+ }).join('');
+ contents+=(g.balls||[]).map(([x,y])=>`<circle cx="${x}" cy="${y}" r="10" fill="#ff9325" stroke="#a45717" stroke-width="2"/>`).join('');
+ contents+=ballRoutes.map((r,i)=>{
+ if(!animated)return `<circle cx="${r.points[0]+22}" cy="${r.points[1]-12}" r="9" fill="#ff9325" stroke="#a45717" stroke-width="2"/>`;
+ const start=ballRoutes.length>1&&d.id!=='knockout'?(i===0?.05:.65):g.routes.some(r=>r.type==='dribble')?.65:.1;
+ const end=ballRoutes.length>1&&d.id!=='knockout'?(i===0?.3:.9):.9;
+ const before=Math.max(0,start-.001),after=Math.min(1,end+.001);
+ return `<circle r="9" fill="#ff9325" stroke="#a45717" stroke-width="2" opacity="0"><animateMotion dur="5s" path="${routePath(r.points)}" keyPoints="0;0;1;1" keyTimes="0;${start};${end};1" calcMode="linear" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;${before};${start};${end};${after};1" dur="5s" repeatCount="indefinite"/></circle>`;
+ }).join('');
  }
- return `<svg class="court-svg specific-diagram" viewBox="0 0 300 210" role="img" aria-label="${escape(title)}"><title>${escape(title)}</title><defs>${[['ball','#e79853'],['move','#c6f778']].map(([name,color])=>`<marker id="${id}-${name}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="${color}"/></marker>`).join('')}</defs>${drawing}${!body?`<text x="150" y="204" text-anchor="middle" fill="#aebca0" font-size="9" font-family="Arial">${active?`SOLIS ${phase+1} / ${d.steps.length}`:'SĀKUMA IZVIETOJUMS'} · ${key==='twoBalls'?'2 BUMBAS':key==='knockout'?'2 BUMBAS · RINDA':key==='shell'?'4 UZBRUCĒJI · 4 AIZSARGI':'SKATS NO AUGŠAS'}</text>`:''}</svg>`;
+ return `<svg class="court-svg precise-guide" viewBox="0 0 600 560" role="img" aria-label="${esc(title)}" data-exercise="${d.id}" data-frame="${index}"><title>${esc(title)}</title><defs><linearGradient id="${id}-wood" x2=".7" y2="1"><stop stop-color="#e7bd7d"/><stop offset="1" stop-color="#c99b5f"/></linearGradient><clipPath id="${id}-clip"><rect x="30" y="30" width="540" height="504"/></clipPath>${[['move','#119eed'],['ball','#ffd04c']].map(([name,color])=>`<marker id="${id}-${name}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10" fill="${color}"/></marker>`).join('')}</defs>${contents}</svg>`;
 }

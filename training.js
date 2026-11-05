@@ -1,19 +1,95 @@
+import {guides} from './guides.js';
+import {additionalDrills} from './additional-drills.js';
 import {photoDrills} from './photo-drills.js';
 import {extraDrills} from './extra-drills.js';
 export const categories = {warmup:'Iesildīšanās',shooting:'Metieni',dribbling:'Dribls',defense:'Aizsardzība',fitness:'Fiziskā sagatavotība',stretching:'Stiepšanās'};
 const initialDrills = [
-{id:'warm',category:'warmup',title:'Iekustini spēli',tag:'GATAVS STARTAM',min:1,steps:['2 minūtes viegla skrējiena un sānu soļu.','Izapļo potītes, gurnus un plecus.','Veic izklupienus, tad 3 īsus paātrinājumus.'],tip:'Sāc mierīgi un pakāpeniski palielini tempu.',pattern:'warm'},
-{id:'form',category:'shooting',title:'Metiena sajūta',tag:'TEHNIKA PIRMS ĀTRUMA',min:1,steps:['Nostājies 1–2 metrus no groza; pēdas plecu platumā.','Pacel bumbu virs acīm, elkoni turi zem bumbas.','Iztaisno kājas un roku; pabeidz ar atbrīvotu plaukstu.','Pēc 5 precīziem metieniem atkāpies vienu soli.'],tip:'Mērķē uz vienu punktu. Saglabā metiena noslēgumu.',pattern:'shot'},
-{id:'spots',category:'shooting',title:'Pieci punkti',tag:'ATRODI SAVU RITMU',min:1,steps:['Izvēlies 5 punktus ap soda laukumu.','No katra izpildi 5 metienus; pēc metiena savāc bumbu.','Grupā viens met, otrs piespēlē, pārējie rotē.','Pēc katras sērijas maini punktu un saskaiti trāpījumus.'],tip:'Vispirms līdzsvars, tad metiens. Pieraksti rezultātu.',pattern:'shot'},
-{id:'handle',category:'dribbling',title:'Bumba tavā kontrolē',tag:'ZEMS DRIBLS · AUGSTA KONTROLE',min:1,steps:['Ieliecies ceļos un turi skatienu uz priekšu.','30 sekundes driblē ar labo, tad kreiso roku.','Maini roku priekšā ķermenim, dribls zem ceļgaliem.','Veic 3 soļus uz priekšu un atpakaļ, saglabājot kontroli.'],tip:'Vadi bumbu ar pirkstu spilventiņiem, nevis plaukstu.',pattern:'dribble'},
-{id:'slalom',category:'dribbling',title:'Maini virzienu',tag:'ĀTRUMS AR KONTROLI',min:1,steps:['Izvieto 4 konusus ar 2 metru atstarpi.','Driblē līkločos, pie katra konusa mainot roku.','Atpakaļceļā izmanto vājāko roku.','Grupā startē ar drošu atstarpi, katrs ar savu bumbu.'],tip:'Pirms virziena maiņas pazemini smaguma centru.',pattern:'dribble'},
-{id:'slide',category:'defense',title:'Aizsardzības soļi',tag:'NEATDOD NEVIENU METRU',min:1,steps:['Ieliecies aizsardzības stājā, rokas plaši.','Virzies sānis 3 metrus, nekrustojot kājas.','Pieskaries līnijai un maini virzienu.','Strādā 20 sekundes, atpūties 20 sekundes.'],tip:'Krūtis uz priekšu, gurni zemu. Nelec starp soļiem.',pattern:'defense'},
-{id:'mirror',category:'defense',title:'Spoguļa duelis',tag:'LASI PRETINIEKU',min:2,steps:['Sadalieties pāros; nostājieties 2 metrus viens no otra.','Vadītājs kustas sānis, partneris atkārto kustību.','Pēc 30 sekundēm mainieties lomām.','Nepāra spēlētājs atpūšas un pēc sērijas rotē pārī.'],tip:'Vēro pretinieka gurnus, nevis rokas.',pattern:'defense'},
-{id:'pass',category:'shooting',title:'Piespēle un metiens',tag:'KOMANDAS RITMS',min:2,steps:['Viens spēlētājs pie soda līnijas, otrs ar bumbu sānos.','Saņem piespēli, nostājies līdzsvarā un met.','Piespēlētājs savāc atlēkušo bumbu; metējs pāriet piespēlē.','Pārējie rotē rindas galā; pēc 5 metieniem maini pusi.'],tip:'Rādi rokas un esi gatavs saņemt bumbu.',pattern:'shot'},
-{id:'sprint',category:'fitness',title:'Pēdējais paātrinājums',tag:'SPĒKS LĪDZ FINĀLAM',min:1,steps:['Atzīmē startu un līniju 5 metrus tālāk.','Skrien līdz līnijai un atpakaļ 20 sekundes.','Atpūties 40 sekundes; atkārto 3 reizes.','Noslēgumā 1 minūti ej un atjauno mierīgu elpošanu.'],tip:'Bremzē ar īsiem soļiem. Sāpju vai reiboņa gadījumā apstājies.',pattern:'warm'}
+  {
+    "id": "warm",
+    "category": "warmup",
+    "title": "Iekustini spēli",
+    "tag": "GATAVS STARTAM",
+    "min": 1,
+    "tip": "Sāc mierīgi un pakāpeniski palielini tempu.",
+    "pattern": "warm"
+  },
+  {
+    "id": "form",
+    "category": "shooting",
+    "title": "Metiena sajūta",
+    "tag": "TEHNIKA PIRMS ĀTRUMA",
+    "min": 1,
+    "tip": "Mērķē uz vienu punktu. Saglabā metiena noslēgumu.",
+    "pattern": "shot"
+  },
+  {
+    "id": "spots",
+    "category": "shooting",
+    "title": "Pieci punkti",
+    "tag": "ATRODI SAVU RITMU",
+    "min": 1,
+    "tip": "Vispirms līdzsvars, tad metiens. Pieraksti rezultātu.",
+    "pattern": "shot"
+  },
+  {
+    "id": "handle",
+    "category": "dribbling",
+    "title": "Bumba tavā kontrolē",
+    "tag": "ZEMS DRIBLS · AUGSTA KONTROLE",
+    "min": 1,
+    "tip": "Vadi bumbu ar pirkstu spilventiņiem, nevis plaukstu.",
+    "pattern": "dribble"
+  },
+  {
+    "id": "slalom",
+    "category": "dribbling",
+    "title": "Maini virzienu",
+    "tag": "ĀTRUMS AR KONTROLI",
+    "min": 1,
+    "tip": "Pirms virziena maiņas pazemini smaguma centru.",
+    "pattern": "dribble"
+  },
+  {
+    "id": "slide",
+    "category": "defense",
+    "title": "Aizsardzības soļi",
+    "tag": "NEATDOD NEVIENU METRU",
+    "min": 1,
+    "tip": "Krūtis uz priekšu, gurni zemu. Nelec starp soļiem.",
+    "pattern": "defense"
+  },
+  {
+    "id": "mirror",
+    "category": "defense",
+    "title": "Spoguļa duelis",
+    "tag": "LASI PRETINIEKU",
+    "min": 2,
+    "tip": "Vēro pretinieka gurnus, nevis rokas.",
+    "pattern": "defense"
+  },
+  {
+    "id": "pass",
+    "category": "shooting",
+    "title": "Piespēle un metiens",
+    "tag": "KOMANDAS RITMS",
+    "min": 2,
+    "tip": "Rādi rokas un esi gatavs saņemt bumbu.",
+    "pattern": "shot"
+  },
+  {
+    "id": "sprint",
+    "category": "fitness",
+    "title": "Pēdējais paātrinājums",
+    "tag": "SPĒKS LĪDZ FINĀLAM",
+    "min": 1,
+    "tip": "Bremzē ar īsiem soļiem. Sāpju vai reiboņa gadījumā apstājies.",
+    "pattern": "warm"
+  }
 ];
-export const drills = [...initialDrills,...extraDrills,...photoDrills].map(d=>{
- if(d.id==='squat')return {...d,media:{exercise:'Bodyweight_Squat',frames:[0,1,0,0],labels:['Sākuma pozīcija','Pietupiena pozīcija']},prescription:'8–12 atkārtojumi · 3 sērijas',equipment:'Bez inventāra'};
+export const drills = [...initialDrills,...extraDrills,...photoDrills,...additionalDrills].map(original=>{
+ const d=guides[original.id]?{...original,steps:guides[original.id].map(g=>g.text)}:original;
+ if(d.id==='countdown'){const {source,...clean}=d;return {...clean,title:'5–4–3–2–1',tag:'2 DIVSOĻI + 2 METIENI',tip:'Sākums soda līnijas kreisajā sānā. Pēc konusa 3 dodies uz 1; pie konusa 2 nemet.',reference:'Lietotāja attēla maršruts bez pārsvītrotā posma',equipment:'4 konusi un 1 bumba'}}
+ if(d.id==='squat')return {...d,steps:['Nostājies ar pēdām plecu platumā; rokas aiz galvas vai sev priekšā.','Virzi gurnus atpakaļ un saliec ceļus sev ērtā dziļumā.','Celies augšā, ceļus saglabājot pēdu virzienā un pēdas pie zemes.','Izpildi 8–12 atkārtojumus; 45 s atpūta. Kopā 3 sērijas.'],media:{exercise:'Bodyweight_Squat',frames:[0,1,0,0],labels:['Sākuma pozīcija','Pietupiena pozīcija']},prescription:'8–12 atkārtojumi · 3 sērijas',equipment:'Bez inventāra'};
  if(d.id==='plank')return {...d,steps:['Nometies uz paklājiņa un sagatavo apakšdelmu atbalstu zem pleciem.','Iztaisno kājas, balstoties uz pēdu pirkstgaliem un apakšdelmiem; saglabā taisnu ķermeņa līniju.','Turi stāju 20 sekundes un brīvi elpo; pārtrauc, ja mugura sāk ieliekties.','Atgriez ceļus uz paklājiņa un atpūties 30 sekundes; atkārto 3 reizes.'],media:{exercise:'Plank',frames:[0,1,1,0],labels:['Sagatavošanās','Planka pozīcija']},prescription:'20 s darbs · 30 s atpūta · 3 sērijas',equipment:'Paklājiņš'};
  return d;
 });

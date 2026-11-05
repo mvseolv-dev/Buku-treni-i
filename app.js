@@ -1,10 +1,11 @@
+import {guides} from './guides.js';
 import {diagramFor as court} from './diagrams.js';
 import {categories,drills,makePlan} from './training.js';
 const $=s=>document.querySelector(s);
 const mediaPath=(d,frame)=>`./assets/exercises/${d.media.exercise}-${frame}.jpg`;
 function cardVisual(d){
  if(d.media)return `<img class="exercise-cover" loading="lazy" src="${mediaPath(d,1)}" alt="${d.title}: ${d.media.labels[1]}"><span class="media-badge">CILVĒKA DEMONSTRĒJUMS</span>`;
- return `<div class="diagram-preview">${court(d,previewStep(d))}<span class="preview-label">${['squat','plank','ankles'].includes(d.id)?'KUSTĪBAS ILUSTRĀCIJA':'ANIMĒTA LAUKUMA SHĒMA'}</span></div>`;
+ return `<div class="diagram-preview">${court(d,previewStep(d),'card')}<span class="preview-label">${['squat','plank','ankles'].includes(d.id)?'KUSTĪBAS ILUSTRĀCIJA':'IZPILDES SHĒMA PA SOĻIEM'}</span></div>`;
 }
 function previewStep(d){
  // Show an actual movement phase in the thumbnail rather than an empty setup.
@@ -19,23 +20,28 @@ function renderLibrary(filter=libraryFilter){
  const visible=drills.filter(d=>(filter==='all'||d.category===filter)&&(!players||d.min<=players)&&`${d.title} ${d.tag} ${categories[d.category]}`.toLocaleLowerCase('lv').includes(query));
  $('#library-count').textContent=`${visible.length} no ${drills.length} vingrinājumiem`;
  $('#drill-grid').innerHTML=visible.map(d=>`<button class="card" data-drill="${d.id}" aria-label="Atvērt ${d.title}"><div class="card-art"><span class="card-number">${String(drills.indexOf(d)+1).padStart(2,'0')} / ${categories[d.category].toUpperCase()}</span>${cardVisual(d)}<span class="card-play">→</span></div><div class="card-body"><span class="card-meta">${d.tag}</span><h3>${d.title}</h3><div class="card-bottom"><span>${d.min}–20 spēlētāji</span><span>${d.steps.length} soļi <span aria-hidden="true">→</span></span></div></div></button>`).join('');
+ document.querySelectorAll('.card svg').forEach(svg=>svg.pauseAnimations?.());
  $('#library-empty').hidden=visible.length>0;
 }
 $('#drill-search').addEventListener('input',()=>renderLibrary());
 $('#library-players').addEventListener('change',()=>renderLibrary());
-let activeDrill,step=0,stepInterval;
+let activeDrill,step=0,stepInterval,storyboardOpen=false;
 function renderDetail(){
  const d=activeDrill;
  const hasPhoto=!!d.media;
+ const frame=guides[d.id]?.[step];
+ const bodyVisual=frame&&['body','bounce'].includes(frame.surface);
  const visual=hasPhoto?`<div class="human-demo"><img class="demo-photo" src="${mediaPath(d,d.media.frames[step])}" alt="${d.title}: ${d.media.labels[d.media.frames[step]]}"><span class="demo-label">${d.media.labels[d.media.frames[step]]}</span><span class="demo-counter">${String(step+1).padStart(2,'0')} / ${String(d.steps.length).padStart(2,'0')}</span></div><div class="pose-strip">${d.media.labels.map((label,i)=>`<figure><img src="${mediaPath(d,i)}" alt="${label}"><figcaption><b>${i+1}</b> ${label}</figcaption></figure>`).join('')}</div>`:'';
- const tactic=!hasPhoto?`<div class="visible-demonstration"><div class="visual-heading"><span>${['ankles'].includes(d.id)?'KUSTĪBAS ILUSTRĀCIJA':'LAUKUMA SHĒMA PA SOĻIEM'}</span><span>${step+1} / ${d.steps.length}</span></div><div class="detail-art">${court(d,step)}</div><p class="visual-caption">${step===0?'Sākuma izvietojums':d.steps[step]}</p><div class="visual-key"><span>● Spēlētājs / pozīcija</span><span>○ Aizsargs</span><span>● Bumba</span></div><p class="visual-explainer">${step===0?'Spied “Nākamais”, lai skatītu kustības secību.':'Zaļais ceļš rāda spēlētāja kustību. Oranžais — bumbas kustību.'}</p></div>`:'';
+ const tactic=!hasPhoto?`<div class="visible-demonstration"><div class="visual-heading"><span>${step===0?'SĀKUMA POZĪCIJA':`SOLIS ${step} / ${d.steps.length-1}`}</span><span>${bodyVisual?'TEHNIKAS ILUSTRĀCIJA':frame?.surface==='floor'?'KUSTĪBU ZONA':'SKATS NO AUGŠAS'}</span></div><div class="detail-art">${court(d,step)}</div>${frame?.caption?`<p class="visual-caption">${frame.caption}</p>`:''}${!bodyVisual?'<div class="visual-key"><span>━ Pārvietošanās</span><span>┄ Metiens / piespēle</span><span>▲ Konuss</span></div>':''}</div>`:'';
  const source=hasPhoto?`<a class="source-link" href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener noreferrer">Demonstrējumi: Free Exercise DB →</a>`:d.source?`<a class="source-link" href="${d.source.url}" target="_blank" rel="noopener noreferrer">${d.source.title} →</a><span> · Saistītais raksts vēl nav pārbaudīts; šeit aprakstīts BUKI variants.</span>`:'';
- $('#dialog-content').innerHTML=`<div class="exercise-detail"><div class="exercise-intro"><div class="eyebrow muted">${categories[d.category]} <span class="detail-type">${hasPhoto?'DEMONSTRĒJUMS':'IZPILDES CEĻVEDIS'}</span></div><h2>${d.title}</h2><div class="exercise-specs"><span>${d.min===1?'Individuāli vai grupā':`No ${d.min} spēlētājiem`}</span><span>${d.equipment||'Basketbola laukums'}</span>${d.prescription?`<span>${d.prescription}</span>`:''}</div></div><div class="exercise-layout"><div class="exercise-visual">${visual}${tactic}</div><div class="exercise-instructions"><div class="steps-heading"><span>IZPILDE PA SOĻIEM</span><button id="auto-steps" class="outline" aria-pressed="${!!stepInterval}">${stepInterval?'Ⅱ Apturēt':'▷ Automātiski'}</button></div><ol class="instruction-list">${d.steps.map((text,i)=>`<li><button data-step="${i}" class="${step===i?'step-active':''}" aria-current="${step===i?'step':'false'}"><span>${String(i+1).padStart(2,'0')}</span><p>${text}</p></button></li>`).join('')}</ol><div class="step-controls"><button id="prev-step" ${step===0?'disabled':''}>← Iepriekšējais</button><span>${step+1} / ${d.steps.length}</span><button id="next-step" ${step===d.steps.length-1?'disabled':''}>Nākamais →</button></div><aside class="coach-note"><span>TRENERA PADOMS</span><p>${d.tip}</p></aside></div></div>${source?`<p class="media-credit">${source}</p>`:''}</div>`;
+ $('#dialog-content').innerHTML=`<div class="exercise-detail"><div class="exercise-intro"><div class="eyebrow muted">${categories[d.category]} <span class="detail-type">${hasPhoto?'DEMONSTRĒJUMS':'IZPILDES CEĻVEDIS'}</span></div><h2>${d.title}</h2><div class="exercise-specs"><span>${d.min===1?'Individuāli vai grupā':`No ${d.min} spēlētājiem`}</span><span>${d.equipment||'Basketbola laukums'}</span>${d.prescription?`<span>${d.prescription}</span>`:''}</div></div><div class="exercise-layout"><div class="exercise-visual">${visual}${tactic}</div><div class="exercise-instructions"><div class="steps-heading"><span>IZPILDE PA SOĻIEM</span><button id="show-storyboard" class="outline" aria-expanded="${storyboardOpen}">${storyboardOpen?'Aizvērt secību':'Visa secība'}</button><button id="auto-steps" class="outline" aria-pressed="${!!stepInterval}">${stepInterval?'Ⅱ Apturēt':'▷ Automātiski'}</button></div><ol class="instruction-list">${d.steps.map((text,i)=>`<li><button data-step="${i}" class="${step===i?'step-active':''}" aria-current="${step===i?'step':'false'}"><span>${i===0?'S':String(i).padStart(2,'0')}</span><p>${text}</p></button></li>`).join('')}</ol><div class="step-controls"><button id="prev-step" ${step===0?'disabled':''}>← Iepriekšējais</button><span>${step===0?'Sākums':`${step} / ${d.steps.length-1}`}</span><button id="next-step" ${step===d.steps.length-1?'disabled':''}>Nākamais →</button></div><aside class="coach-note"><span>TRENERA PADOMS</span><p>${d.tip}</p></aside></div></div>${storyboardOpen?`<section class="storyboard" aria-label="Visa vingrinājuma secība">${d.steps.map((text,i)=>`<article><h3>${i===0?'Sākuma pozīcija':`Solis ${i}`}</h3>${hasPhoto?`<img src="${mediaPath(d,d.media.frames[i])}" alt="${d.media.labels[d.media.frames[i]]}">`:court(d,i,'overview')}<p>${text}</p></article>`).join('')}</section>`:''}${source?`<p class="media-credit">${source}</p>`:''}</div>`;
+ $('#show-storyboard').onclick=()=>{storyboardOpen=!storyboardOpen;renderDetail()};
+ document.querySelectorAll('.storyboard svg').forEach(svg=>svg.pauseAnimations?.());
  $('#prev-step').onclick=()=>{step--;renderDetail()};$('#next-step').onclick=()=>{step++;renderDetail()};
  document.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{step=Number(b.dataset.step);renderDetail()});
  $('#auto-steps').onclick=()=>{if(stepInterval){clearInterval(stepInterval);stepInterval=null}else{stepInterval=setInterval(()=>{step=(step+1)%d.steps.length;renderDetail()},5000)}renderDetail()};
 }
-function openDrill(id){activeDrill=drills.find(d=>d.id===id);step=0;clearInterval(stepInterval);stepInterval=null;renderDetail();$('#drill-dialog').showModal()}
+function openDrill(id){storyboardOpen=false;activeDrill=drills.find(d=>d.id===id);step=0;clearInterval(stepInterval);stepInterval=null;renderDetail();$('#drill-dialog').showModal()}
 document.addEventListener('click',e=>{const target=e.target.closest('[data-drill]');if(target)openDrill(target.dataset.drill)});
 $('.close').onclick=()=>$('#drill-dialog').close();
 $('#drill-dialog').addEventListener('close',()=>{clearInterval(stepInterval);stepInterval=null});

@@ -20,7 +20,7 @@ Paplašinājums sagatavots 2026-11-05. Ārējo avotu satura lasīšanas mēģin�
 
 | Avots | Saite | Statuss |
 | --- | --- | --- |
-| Lietotāja ieteiktais Nike 5–4–3–2–1 | https://www.ussportscamps.com/tips/basketball/nike-basketball-5-4-3-2-1-shooting-drill | Saturs nav nolasīts; lietotnē pievienota saite un atsevišķi marķēts BUKI variants |
+| Lietotāja ieteiktais Nike 5–4–3–2–1 | https://www.ussportscamps.com/tips/basketball/nike-basketball-5-4-3-2-1-shooting-drill | Saturs nav nolasīts; šis raksts vairs nav aktīvā 5–4–3–2–1 noteikumu avots. Lietotne seko vēlāk sniegtajam lietotāja attēlam. |
 | Breakthrough Basketball | https://www.breakthroughbasketball.com/drills/basketballdrills.html | Bibliotēkas izpēte gaida tīkla piekļuvi |
 | Jr. NBA | https://jr.nba.com/basketball-practice-plans/ | Treniņu plānu izpēte gaida tīkla piekļuvi |
 | Basketball For Coaches | https://www.basketballforcoaches.com/basketball-drills-and-games/ | Vingrinājumu bibliotēkas izpēte gaida tīkla piekļuvi |
@@ -29,4 +29,4 @@ Vides konfigurācijas melnrakstā pievienoti tikai šo avotu domēni, saglabājo
 
 ## Vingrinājumu varianti
 
-Knockout ir bez svešu bumbu aizsišanas. HORSE lieto piecu burtu izslēgšanu. Spēle līdz 21 ir BUKI metienu punktu spēle, nevis kontakta 21. 5–4–3–2–1 ir skaidri marķēta BUKI progresija (5 tuvie, 4 elkoņa, 3 spārna, 2 soda, 1 tālais trāpījums); tā nav pārbaudīts Nike variants. Spēļu noteikumi var atšķirties, tāpēc lietotnē norādīts tieši izmantotais variants.
+Knockout ir bez svešu bumbu aizsišanas. HORSE lieto piecu burtu izslēgšanu. Spēle līdz 21 ir BUKI metienu punktu spēle, nevis kontakta 21. 5–4–3–2–1 pārrakstīts pēc lietotāja attēla: četri konusi 0/1/2/3, sākums soda līnijas kreisajā sānā, kreisais divsolis, apkārt konusam 0 un labais divsolis, metiens pie 3 un metiens pie 1. Lietotāja pārsvītrotais metiens pie 2 ir izņemts. Vecā 5/4/3/2/1 trāpījumu skaitīšanas progresija ir noņemta. Spēļu noteikumi var atšķirties, tāpēc lietotnē norādīts tieši izmantotais variants.
