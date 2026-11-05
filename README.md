@@ -56,3 +56,15 @@ Automātiskās pārbaudes pārbauda 100 ierakstus, katra maršruta sākumu pie p
 ## Stiepšanās foto
 
 Visiem sešiem stiepšanās vingrinājumiem ir vizuāli pārskatīts, lokāli glabāts cilvēka foto. Stiepšanās sadaļa parāda visus sešus uzreiz. Tie ir darba pozas piemēri; lietotne tiem neizdomā sākuma/beigu fotopāri, ja avots to nepiedāvā. Teksta soļi paliek atsevišķi. Pārbaudot bibliotēku, nevienam stiepšanās vingrinājumam nav atļauts palikt bez foto.
+
+## Visi izvēlētie dalībnieki strādā
+
+`participation.js` katram plāna ierakstam veido pilnu darba sadalījumu. Katrs dalībnieks ir tieši vienā grupā ar konkrētu lomu; neviens netiek atstāts pāri. Četri dalībnieki pāru darbā veido 2 pārus. Pieci dalībnieki piemērotos metienu vingrinājumos veido 3 + 2 grupas. Fiksēti trīs cilvēku vingrinājumi četriem netiek atlasīti. “Uzbrūc aizsarga pieejai” atbalsta arī četru lomu variantu, pievienojot atsevišķu savācēju gan shēmā, gan darba sadalījumā. Individuālajiem nepārtrauktā maršruta metienu vingrinājumiem katram vajadzīgs savs grozs; savācēja loma tiem netiek izdomāta.
+
+Inventāra sadaļā norāda grozus un bumbas. Noklusējums: 2 grozi un bumbu skaits pēc spēlētāju skaita; pēc bumbu lauka manuālas maiņas saglabā reālo daudzumu. Plāns ņem vērā šos ierobežojumus un skaidri paziņo, ja izvēlētajam fokusam nav atbilstoša formāta. Rindas/izslēgšanas spēles paliek apskatāmas pilnajā bibliotēkā, bet netiek ieliktas plānā, kas sola vienlaicīgu iesaisti. Bibliotēkas filtrs sākotnēji seko plānotāja spēlētāju skaitam; visus formātus var ieslēgt atsevišķi. Plāna atvēršana un eksports saglabā tieši ģenerētās grupas, nevis atver sākotnējo vispārīgo piemēru.
+
+Zilie ģeometriskie cilvēciņi izņemti. Piemērotām pozām izmantoti cilvēku foto; bumbas/pēdu kustībām — atsevišķas kustības shēmas, tās netiek sauktas par foto demonstrējumiem.
+
+## Ikona telefonā
+
+Pārlūka ikona, Apple sākuma ekrāna ikona un `manifest.webmanifest` norāda uz lietotāja BUKI logo `assets/buki-logo.png`. Vecā B monogramma izņemta. Sākuma ekrāna pievienošana izmanto pārlūkprogrammas iespējas; bezsaistes darbība nav pievienota.

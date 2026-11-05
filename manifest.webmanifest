@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "BUKI — basketbola treniņi",
+  "short_name": "BUKI",
+  "lang": "lv",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101110",
+  "theme_color": "#101110",
+  "icons": [
+    {
+      "src": "./assets/buki-logo.png",
+      "sizes": "1000x1000",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

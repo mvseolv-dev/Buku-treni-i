@@ -30,3 +30,7 @@ Vides konfigurācijas melnrakstā pievienoti tikai šo avotu domēni, saglabājo
 ## Vingrinājumu varianti
 
 Knockout ir bez svešu bumbu aizsišanas. HORSE lieto piecu burtu izslēgšanu. Spēle līdz 21 ir BUKI metienu punktu spēle, nevis kontakta 21. 5–4–3–2–1 pārrakstīts pēc lietotāja attēla: četri konusi 0/1/2/3, sākums soda līnijas kreisajā sānā, kreisais divsolis, apkārt konusam 0 un labais divsolis, pēc tam metieni pie 3 → 2 → 1. Pēc sākotnējā attēla lietotājs tekstā precizēja, ka metiens pie 2 ir jāiekļauj; tas ir atjaunots. Vecā 5/4/3/2/1 trāpījumu skaitīšanas progresija ir noņemta. Spēļu noteikumi var atšķirties, tāpēc lietotnē norādīts tieši izmantotais variants.
+
+## Papildu foto pozām
+
+Wrist_Circles/0.jpg (plaukstu apļošanas stāja) un Single-Leg_Hop_Progression/0.jpg (līdzsvars uz vienas kājas) no tās pašas Free Exercise DB bibliotēkas. Saglabāti oriģinālie ieraksti un attēli ar esošo Unlicense licenci. Tie izmantoti kā konkrētās pozas foto piemēri, nevis izdomāti nepārtraukti video. Sagatavošanās stājai izmantots lokāli esošais Shoulder_Stretch/0.jpg; pietupiena pozai — Bodyweight_Squat/1.jpg.

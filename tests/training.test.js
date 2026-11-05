@@ -1,3 +1,4 @@
+import {participationFor,adaptForPlayers} from '../participation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
@@ -6,7 +7,7 @@ import {guides} from '../guides.js';
 import {diagramFor} from '../diagrams.js';
 test('All player counts, durations and focuses produce eligible plans with exact time budgets',()=>{
  for(let n=1;n<=20;n++)for(const duration of [30,45,60,90])for(const focus of ['all',...Object.keys(categories)]){
-  const p=makePlan(n,duration,focus);
+  const p=makePlan(n,duration,focus,Math.random,{baskets:20,balls:40});
   assert.equal(p.reduce((s,d)=>s+d.minutes,0),duration);
   assert.equal(p[0].category,'warmup');assert.ok(p.every(d=>d.min<=n&&d.minutes>0));
   assert.equal(new Set(p.map(d=>d.id)).size,p.length);if(focus!=='all')assert.ok(p.some(d=>d.category===focus));
@@ -66,4 +67,38 @@ test('Full sessions end with stretching and selection rotates without mutating t
 test('Every stretching exercise has a verified local posture photo, used consistently rather than a fake start/end pair',()=>{
  const stretching=drills.filter(d=>d.category==='stretching');assert.equal(stretching.length,6);
  for(const d of stretching){assert.equal(d.media.kind,'photo');assert.ok(Number.isInteger(d.media.cover));assert.ok(d.media.frames.every(f=>f===d.media.cover));assert.ok(existsSync(new URL(`../assets/exercises/${d.media.exercise}-${d.media.cover}.jpg`,import.meta.url)))}
+});
+
+test('Every participant is assigned exactly once in every supported exercise and group size',()=>{
+ for(const d of drills)for(let n=1;n<=20;n++){
+  const o=participationFor(d,n);if(!o)continue;
+  const members=o.groups.flatMap(g=>g.members);assert.equal(members.length,n,`${d.id}:${n}`);assert.deepEqual(members.map(m=>m.player),Array.from({length:n},(_,i)=>i+1));assert.ok(members.every(m=>m.role.length>4));assert.equal(o.waiting,0);assert.equal(o.active,n);
+ }
+});
+test('Four players work in two pairs; fixed three-person exercises are excluded',()=>{
+ for(const id of ['mirror','passing','form']){const o=participationFor(drills.find(d=>d.id===id),4);assert.deepEqual(o.groups.map(g=>g.size),[2,2]);assert.equal(o.active,4)}
+ for(const id of ['weave','boxout','lane','two-one'])assert.equal(participationFor(drills.find(d=>d.id===id),4),null,id);
+ const d=adaptForPlayers(drills.find(d=>d.id==='attack-closeout'),4,{baskets:1,balls:1});assert.equal(d.organization.groups[0].members.length,4);assert.equal(d.organization.groups[0].members.at(-1).role,'Savācējs');assert.ok(diagramFor(d,0).includes('>S</text>'));
+});
+test('Five-player shooting uses a triple and a pair, with no remainder',()=>{
+ const d=drills.find(d=>d.id==='form'),o=participationFor(d,5,{baskets:2,balls:2});assert.deepEqual(o.groups.map(g=>g.size),[3,2]);assert.equal(o.requirements.baskets,2);assert.equal(o.active,5);
+});
+test('Inventory constrains the plan; incompatible or waiting games cannot sneak in',()=>{
+ const solo=drills.find(d=>d.id==='countdown');assert.equal(participationFor(solo,4,{baskets:2,balls:4}),null);
+ assert.ok(participationFor(solo,4,{baskets:4,balls:4}));
+ for(const id of ['knockout','horse','partner-21'])assert.equal(participationFor(drills.find(d=>d.id===id),4),null);
+ assert.equal(participationFor(drills.find(d=>d.id==='two-balls'),4,{baskets:2,balls:4}),null);
+ assert.ok(participationFor(drills.find(d=>d.id==='two-balls'),4,{baskets:2,balls:8}));
+ assert.throws(()=>makePlan(4,60,'shooting',Math.random,{baskets:0,balls:4}));
+ for(const d of makePlan(4,60,'shooting',Math.random,{baskets:1,balls:1})){assert.equal(d.organization.players,4);assert.ok(d.organization.requirements.baskets<=1);assert.ok(d.organization.requirements.balls<=1)}
+});
+test('No generic blue humanoid remains in the demonstration renderer',()=>{
+ for(const d of drills)if(!d.media)for(let i=0;i<d.steps.length;i++){const svg=diagramFor(d,i);assert.ok(!svg.includes('body-person'));assert.ok(!svg.includes('#188dcc'));assert.ok(!svg.includes('#168dd1'));}
+});
+test('The manifest and browser icons reference the supplied team logo',()=>{
+ const manifest=JSON.parse(readFileSync(new URL('../manifest.webmanifest',import.meta.url)));assert.equal(manifest.icons[0].src,'./assets/buki-logo.png');assert.equal(manifest.icons[0].sizes,'1000x1000');const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');assert.ok(html.includes('rel="apple-touch-icon" href="./assets/buki-logo.png"'));assert.ok(!html.includes('icon.svg'));
+});
+
+test('A drill with a defined pair format does not acquire an invented third role',()=>{
+ const paired=drills.find(d=>d.id==='give-go');assert.equal(participationFor(paired,5),null);assert.equal(participationFor(paired,3),null);assert.deepEqual(participationFor(paired,4).groups.map(g=>g.size),[2,2]);
 });

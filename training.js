@@ -1,3 +1,4 @@
+import {adaptForPlayers} from './participation.js';
 import {guides} from './guides.js';
 import {additionalDrills} from './additional-drills.js';
 import {photoDrills} from './photo-drills.js';
@@ -96,15 +97,16 @@ export const drills = [...initialDrills,...extraDrills,...photoDrills,...additio
 function shuffled(items, random){
  const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;
 }
-export function makePlan(players,duration,focus,random=Math.random){
+export function makePlan(players,duration,focus,random=Math.random,resources={baskets:2,balls:players}){
  if(!Number.isInteger(players)||players<1||players>20) throw new Error('Spēlētāju skaitam jābūt no 1 līdz 20.');
  if(![30,45,60,90].includes(duration)) throw new Error('Neatbalstīts ilgums.');
  if(focus!=='all'&&!categories[focus]) throw new Error('Neatbalstīts fokuss.');
- const eligible=drills.filter(d=>d.min<=players&&(!d.max||d.max>=players));
+ const eligible=drills.map(d=>adaptForPlayers(d,players,resources)).filter(Boolean);
  const warm=shuffled(eligible.filter(d=>d.category==='warmup'),random)[0];
  const slots=({30:3,45:4,60:5,90:7})[duration];
  let pool=eligible.filter(d=>d.category!=='warmup'&&(focus==='all'?d.category!=='stretching':d.category===focus));
  if(focus==='warmup')pool=eligible.filter(d=>d.category==='warmup'&&d.id!==warm.id);
+ if(!pool.length)throw new Error(`Šim ${players} spēlētāju skaitam un inventāram nav piemērotu vingrinājumu izvēlētajā kategorijā. Maini fokusu vai pieejamo grozu/bumbu skaitu.`);
  const mainSlots=focus==='all'?slots-1:slots;
  let main;
  if(focus==='all'){
