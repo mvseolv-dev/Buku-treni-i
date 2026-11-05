@@ -1,3 +1,4 @@
+import {existsSync,readFileSync} from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makePlan,drills,categories} from '../training.js';
@@ -27,8 +28,15 @@ test('Every drill has actionable steps and a unique id',()=>{
 import {diagramFor} from '../diagrams.js';
 import {diagramConfigs} from '../extra-drills.js';
 import {phaseRoutes} from '../diagram-phases.js';
-test('Every exercise has its own valid diagram and an explicit phase for every instruction',()=>{
+test('Every exercise has matching local photo frames or a valid diagram for each instruction',()=>{
  for(const d of drills){
+  if(d.media){
+   assert.equal(d.media.frames.length,d.steps.length,d.id);
+   const source=JSON.parse(readFileSync(new URL('../assets/exercises/sources.json',import.meta.url)))[d.media.exercise];
+   assert.ok(source,d.id);
+   for(const frame of d.media.frames){assert.ok([0,1].includes(frame));assert.ok(existsSync(new URL(`../assets/exercises/${d.media.exercise}-${frame}.jpg`,import.meta.url)),d.id)}
+   continue;
+  }
   const key=d.scene||d.id;const config=diagramConfigs[key];
   assert.ok(config, d.id);assert.equal(phaseRoutes[key].length,d.steps.length,d.id);
   for(const indexes of phaseRoutes[key])for(const i of indexes)assert.ok(config[2][i],`${d.id}: route ${i}`);
@@ -52,4 +60,11 @@ test('Knockout, shell and two-ball dribbling have the required setups',()=>{
  assert.equal(drills.find(d=>d.id==='shell').min,8);
  assert.ok(diagramFor(drills.find(d=>d.id==='knockout')).includes('2 BUMBAS'));
  assert.ok(diagramFor(drills.find(d=>d.id==='plank'),1).includes('SKATS NO SĀNIEM'));
+});
+
+test('Full sessions finish with stretching; stretching focus is available for one player',()=>{
+ for(const duration of [30,45,60,90]){
+  const p=makePlan(1,duration,'all');assert.equal(p.at(-1).category,'stretching');assert.equal(p.at(-1).minutes,5);
+  const stretches=makePlan(1,duration,'stretching');assert.ok(stretches.slice(1).every(d=>d.category==='stretching'&&d.media));
+ }
 });

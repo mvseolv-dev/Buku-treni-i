@@ -1,0 +1,181 @@
+{
+  "Bodyweight_Squat": {
+    "name": "Bodyweight Squat",
+    "force": "push",
+    "level": "beginner",
+    "mechanic": "compound",
+    "equipment": "body only",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "instructions": [
+      "Stand with your feet shoulder width apart. You can place your hands behind your head. This will be your starting position.",
+      "Begin the movement by flexing your knees and hips, sitting back with your hips.",
+      "Continue down to full depth if you are able,and quickly reverse the motion until you return to the starting position. As you squat, keep your head and chest up and push your knees out."
+    ],
+    "category": "strength",
+    "images": [
+      "Bodyweight_Squat/0.jpg",
+      "Bodyweight_Squat/1.jpg"
+    ],
+    "id": "Bodyweight_Squat"
+  },
+  "Plank": {
+    "name": "Plank",
+    "force": "static",
+    "level": "beginner",
+    "mechanic": "isolation",
+    "equipment": "body only",
+    "primaryMuscles": [
+      "abdominals"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Get into a prone position on the floor, supporting your weight on your toes and your forearms. Your arms are bent and directly below the shoulder.",
+      "Keep your body straight at all times, and hold this position as long as possible. To increase difficulty, an arm or leg can be raised."
+    ],
+    "category": "strength",
+    "images": [
+      "Plank/0.jpg",
+      "Plank/1.jpg"
+    ],
+    "id": "Plank"
+  },
+  "Calf_Stretch_Hands_Against_Wall": {
+    "name": "Calf Stretch Hands Against Wall",
+    "force": "static",
+    "level": "beginner",
+    "mechanic": "isolation",
+    "equipment": null,
+    "primaryMuscles": [
+      "calves"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Stand facing a wall from several feet away. Stagger your stance, placing one foot forward.",
+      "Lean forward and rest your hands on the wall, keeping your heel, hip and head in a straight line.",
+      "Attempt to keep your heel on the ground. Hold for 10-20 seconds and then switch sides."
+    ],
+    "category": "stretching",
+    "images": [
+      "Calf_Stretch_Hands_Against_Wall/0.jpg",
+      "Calf_Stretch_Hands_Against_Wall/1.jpg"
+    ],
+    "id": "Calf_Stretch_Hands_Against_Wall"
+  },
+  "Kneeling_Hip_Flexor": {
+    "name": "Kneeling Hip Flexor",
+    "force": "static",
+    "level": "beginner",
+    "mechanic": "isolation",
+    "equipment": null,
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "quadriceps"
+    ],
+    "instructions": [
+      "Kneel on a mat and bring your right knee up so the bottom of your foot is on the floor and extend your left leg out behind you so the top of your foot is on the floor.",
+      "Shift your weight forward until you feel a stretch in your hip. Hold for 15 seconds, then repeat for your other side."
+    ],
+    "category": "stretching",
+    "images": [
+      "Kneeling_Hip_Flexor/0.jpg",
+      "Kneeling_Hip_Flexor/1.jpg"
+    ],
+    "id": "Kneeling_Hip_Flexor"
+  },
+  "Seated_Floor_Hamstring_Stretch": {
+    "name": "Seated Floor Hamstring Stretch",
+    "force": "static",
+    "level": "beginner",
+    "mechanic": null,
+    "equipment": null,
+    "primaryMuscles": [
+      "hamstrings"
+    ],
+    "secondaryMuscles": [
+      "calves"
+    ],
+    "instructions": [
+      "Sit on a mat with your right leg extended in front of you and your left leg bent with your foot against your right inner thigh.",
+      "Lean forward from your hips and reach for your ankle until you feel a stretch in your hamstring. Hold for 15 seconds, then repeat for your other side."
+    ],
+    "category": "stretching",
+    "images": [
+      "Seated_Floor_Hamstring_Stretch/0.jpg",
+      "Seated_Floor_Hamstring_Stretch/1.jpg"
+    ],
+    "id": "Seated_Floor_Hamstring_Stretch"
+  },
+  "Shoulder_Stretch": {
+    "name": "Shoulder Stretch",
+    "force": "pull",
+    "level": "beginner",
+    "mechanic": null,
+    "equipment": null,
+    "primaryMuscles": [
+      "shoulders"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Reach your left arm across your body and hold it straight."
+    ],
+    "category": "stretching",
+    "images": [
+      "Shoulder_Stretch/0.jpg",
+      "Shoulder_Stretch/1.jpg"
+    ],
+    "id": "Shoulder_Stretch"
+  },
+  "Standing_Lateral_Stretch": {
+    "name": "Standing Lateral Stretch",
+    "force": "static",
+    "level": "beginner",
+    "mechanic": null,
+    "equipment": null,
+    "primaryMuscles": [
+      "abdominals"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Take a slightly wider than hip distance stance with your knees slightly bent.",
+      "Place your right hand on your right hip to support the spine.",
+      "Raise your left arm in a vertical line and place your left hand behind your head. Keep it there as you incline your torso to the right.",
+      "Keep your weight evenly distributed between both legs (don't lean into your left hip). Switch sides."
+    ],
+    "category": "stretching",
+    "images": [
+      "Standing_Lateral_Stretch/0.jpg",
+      "Standing_Lateral_Stretch/1.jpg"
+    ],
+    "id": "Standing_Lateral_Stretch"
+  },
+  "Standing_Elevated_Quad_Stretch": {
+    "name": "Standing Elevated Quad Stretch",
+    "force": "static",
+    "level": "beginner",
+    "mechanic": null,
+    "equipment": "other",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Start by standing with your back about two to three feet away from a bench or step.",
+      "Lift one leg behind you and rest your foot on the step,either on your instep or the ball of your foot, whichever you find most comfortable.",
+      "Keep your supporting knee slightly bent and avoid letting that knee extend out beyond your toes. Switch sides."
+    ],
+    "category": "stretching",
+    "images": [
+      "Standing_Elevated_Quad_Stretch/0.jpg",
+      "Standing_Elevated_Quad_Stretch/1.jpg"
+    ],
+    "id": "Standing_Elevated_Quad_Stretch"
+  }
+}

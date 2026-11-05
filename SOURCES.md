@@ -1,4 +1,20 @@
-# Vingrinājumu avoti un pārbaudes statuss
+# Vingrinājumu demonstrējumu avoti
+
+## Pārbaudīts: Free Exercise DB
+
+- Repozitorijs: https://github.com/yuhonas/free-exercise-db
+- Dati: https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json
+- Licence: https://github.com/yuhonas/free-exercise-db/blob/main/LICENSE.md — Unlicense.
+- Datu kopa un 16 demonstrējumu attēli lejupielādēti 2026-11-05. Attēli pārskatīti un piesaistīti konkrētām pozām, nevis tikai kopīgai kategorijai. Plank/0.jpg rāda sagatavošanos uz ceļiem; Plank/1.jpg — planku uz apakšdelmiem. Kartītes izmanto darba pozīciju.
+- Lokālie faili: assets/exercises/. Oriģinālie attiecīgo vingrinājumu ieraksti saglabāti sources.json; licences teksts — LICENSE.txt.
+- Astoņi vingrinājumi: pietupiens, planks, ikru stiepšana pie sienas, gūžas priekšpuses stiepšana uz ceļa, sēdus augšstilba aizmugures stiepšana, pleca stiepšana pāri ķermenim, sānu stiepšana stāvus un augšstilba priekšpuses stiepšana ar pēdu uz soliņa.
+- Apraksti latviski pielāgoti konkrēto pozīciju secībai un mēreniem atkārtojumiem/ilgumiem. Tie nav individuāls medicīnisks ieteikums.
+- Nav pierādījumu, ka tieši šī bibliotēka tika izmantota lietotāja iepriekšējā “Mans uzturs” projektā. Šī saikne netiek apgalvota.
+- Tie ir divu pozīciju fotoattēli, nevis video vai GIF. Automātiska soļu maiņa pārslēdz atbilstošo foto; tā nesimulē nepārtrauktu kustību.
+
+## Basketbola avotu izpēte
+
+
 
 Paplašinājums sagatavots 2026-11-05. Ārējo avotu satura lasīšanas mēģinājumus bloķēja vides HTTPS starpniekserveris ar 403. Tāpēc nevar apgalvot, ka šo vietņu materiāli ir izlasīti, pārbaudīti vai ka ir pārmeklētas visas datubāzes. Visi jaunie vingrinājumu teksti ir patstāvīgi BUKI formulēti varianti, nevis šo vietņu tekstu tulkojumi. Avotu materiāli nav pārkopēti projektā.
 
