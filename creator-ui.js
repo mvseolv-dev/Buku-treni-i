@@ -1,8 +1,8 @@
-import {buildWorkspace} from './creator-workspace.js?v=20261113q';
-import {locateTime,phaseTime} from './studio-time.js?v=20261113q';
-import {marksMarkup} from './court-marks.js?v=20261113q';
-import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113q';
-import {courtMarkup,held,thumbnailFor,stateAt} from './motion-player.js?v=20261113q';
+import {buildWorkspace} from './creator-workspace.js?v=20261113r';
+import {locateTime,phaseTime} from './studio-time.js?v=20261113r';
+import {marksMarkup} from './court-marks.js?v=20261113r';
+import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113r';
+import {courtMarkup,held,thumbnailFor,stateAt} from './motion-player.js?v=20261113r';
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const path=points=>'M'+points.map(p=>p.join(' ')).join('L');
@@ -115,7 +115,7 @@ export function initCreator(root,{onSave,onPreview}={}){
  function load(next){pauseStudio();animateView=false;playBuilt=null;checked(next);history.push(clone(draft));draft=clone(next);mode='setup';editing=null;points=[];aimTarget=null;q('[data-aim]').value='default';selected=0;selectedBall=0;q('[data-parallel]').checked=false;selectedCone=null;persist();error('');render()}
 
  function clock(t){return `${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`}
- function syncStudio(){const built=playBuilt||checked(draft),loc=locateTime(built.motion,playTime);q('[data-studio-phase-count]').textContent=built.motion.length;q('[data-studio-scrub]').max=Math.max(.01,loc.total);q('[data-studio-scrub]').value=loc.time;q('[data-studio-clock]').textContent=`${clock(loc.time)} / ${clock(loc.total)}`;q('[data-studio-phase-label]').textContent=animateView&&loc.index>=0?`Fāze ${loc.index+1}: ${built.motion[loc.index].title}`:mode==='setup'?'Sākuma izvietojums':'Zīmēšanas režīms';q('[data-studio-play]').textContent=playing?'Ⅱ Pauze':'▶ Atskaņot';q('[data-studio-edit]').setAttribute('aria-pressed',!animateView);q('[data-studio-animate]').setAttribute('aria-pressed',animateView);root.querySelectorAll('[data-phase-action]').forEach((b,i)=>b.classList.toggle('playing',animateView&&i===loc.index));q('[data-studio-phase-list]').querySelector('.playing')?.scrollIntoView({block:'nearest'});root.dataset.studioMode=animateView?'animate':'edit'}
+ function syncStudio(){const built=playBuilt||checked(draft),loc=locateTime(built.motion,playTime);q('[data-studio-phase-count]').textContent=built.motion.length;q('[data-studio-scrub]').max=Math.max(.01,loc.total);q('[data-studio-scrub]').value=loc.time;q('[data-studio-clock]').textContent=`${clock(loc.time)} / ${clock(loc.total)}`;q('[data-studio-phase-label]').textContent=animateView&&loc.index>=0?`Fāze ${loc.index+1}: ${built.motion[loc.index].title}`:mode==='setup'?'Sākuma izvietojums':'Zīmēšanas režīms';q('[data-studio-play]').textContent=playing?'Ⅱ Pauze':'▶ Atskaņot';q('[data-studio-edit]').setAttribute('aria-pressed',!animateView);q('[data-studio-animate]').setAttribute('aria-pressed',animateView);root.querySelectorAll('[data-phase-action]').forEach((b,i)=>b.classList.toggle('playing',animateView&&i===loc.index));let actionPhase=-1;draft.actions.forEach((a,i)=>{if(!a.parallel||i===0)actionPhase++;q(`[data-edit-step="${i}"]`)?.closest('li').classList.toggle('playing',animateView&&actionPhase===loc.index)});q('[data-studio-phase-list]').querySelector('.playing')?.scrollIntoView({block:'nearest'});root.dataset.studioMode=animateView?'animate':'edit'}
  function pauseStudio(){playing=false;lastFrame=0;cancelAnimationFrame(playFrame)}
  function startAnimation(){playBuilt=checked(draft);if(!playBuilt.motion.length){error('Pievieno vismaz vienu darbību.');return false}animateView=true;markTool='off';q('[data-mark-tool]').value='off';return true}
  function animateTick(now){if(!playing||root.hidden){pauseStudio();return}if(lastFrame)playTime+=(now-lastFrame)/1000*playSpeed;lastFrame=now;const total=locateTime(playBuilt.motion,playTime).total;if(playTime>=total){if(q('[data-studio-loop]').checked)playTime=0;else{playTime=total;pauseStudio()}}syncStudio();draw();if(playing)playFrame=requestAnimationFrame(animateTick)}
@@ -127,7 +127,7 @@ export function initCreator(root,{onSave,onPreview}={}){
  q('[data-studio-restart]').onclick=()=>{pauseStudio();playTime=0;if(startAnimation()){syncStudio();draw()}};
  q('[data-studio-next]').onclick=()=>{pauseStudio();if(startAnimation()){const loc=locateTime(playBuilt.motion,playTime);playTime=loc.index+1<playBuilt.motion.length?phaseTime(playBuilt.motion,loc.index+1):loc.total;syncStudio();draw()}};
  const oldPhaseClick=q('[data-phases]').onclick;q('[data-phases]').onclick=e=>{pauseStudio();animateView=false;playBuilt=null;oldPhaseClick(e);const button=e.target.closest('[data-phase-action]');if(button){const built=checked(draft),actionIndex=Number(button.dataset.phaseAction),phase=draft.actions.slice(0,actionIndex+1).filter((a,i)=>i===0||!a.parallel).length-1;playTime=phaseTime(built.motion,phase);syncStudio()}};
- const oldBack=q('[data-studio-back]').onclick;q('[data-studio-back]').onclick=()=>{pauseStudio();oldBack()};
+ const oldBack=q('[data-studio-back]').onclick;q('[data-studio-back]').onclick=()=>{pauseStudio();syncStudio();oldBack()};
  render();return {load};
 }
 
