@@ -1,9 +1,9 @@
-import {compileDraft,readSavedDrafts} from './creator-model.js?v=20261113k';
-import {initCreator} from './creator-ui.js?v=20261113k';
+import {compileDraft,readSavedDrafts} from './creator-model.js?v=20261113l';
+import {initCreator} from './creator-ui.js?v=20261113l';
 import {generatePlan,modes,candidates,lightDrill,retimeEntry} from './planner.js?v=20261113f';
 import {hoopsDrills} from './hoops-data.js';
 import {motionDrills} from './motion-data.js?v=20261113d';
-import {mountMotion,thumbnailFor} from './motion-player.js?v=20261113k';
+import {mountMotion,thumbnailFor} from './motion-player.js?v=20261113l';
 import {drills as oldDrills} from './training.js';
 import {diagramFor} from './diagrams.js';
 const original=oldDrills.find(d=>d.id==='countdown');
