@@ -49,7 +49,7 @@ export function compileDraft(input,options={}){
    texts.push((before.balls.length>1&&phase.action?`B${(event.ball??0)+1}: `:'')+phase.text);seconds=Math.max(seconds,phase.seconds);
   }
   for(const a of actions)if(a.type==='collect'&&moves.some(m=>m.actor===a.actor&&m.path.at(-1)[0]!==after.positions[a.actor][0]))throw Error('Pārbaudi bumbas savācēja kustību.');
-  motion.push({title:events.length>1?'Vienlaicīgas darbības':compileSingle({...input,start:before.positions,initialBalls:before.balls,actions:[events[0]]},{continuation:true}).motion[0].title,text:texts.join(' '),before,after,moves,actions,action:actions[0]??null,seconds});state=after;
+  motion.push({title:events.length>1?'Vienlaicīgas darbības':compileSingle({...input,start:before.positions,initialBalls:before.balls,actions:[events[0]]},{continuation:true}).motion[0].title,text:texts.join(' '),before,after,moves,actions,eventTexts:texts,action:actions[0]??null,seconds});state=after;
  }
  return {...seed,draft:copy(input),motion,baskets:input.actions.some(a=>a.type==='shot')?1:0};
 }
