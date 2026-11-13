@@ -67,5 +67,5 @@ export function rotationFor(drill,count,round=0){
  if(!Number.isInteger(count)||count<drill.teamSize||count>12)throw new Error('Nepiemērots spēlētāju skaits');
  const offset=round%count;
  const active=Array.from({length:drill.teamSize},(_,i)=>(offset+i)%count+1);
- return {active,waiting:Array.from({length:count},(_,i)=>i+1).filter(n=>!active.includes(n))};
+ return {active,waiting:Array.from({length:count-drill.teamSize},(_,i)=>(offset+drill.teamSize+i)%count+1)};
 }
