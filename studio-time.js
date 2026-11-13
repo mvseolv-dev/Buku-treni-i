@@ -1,0 +1,2 @@
+export function locateTime(motion,time){const total=motion.reduce((n,p)=>n+p.seconds,0),t=Math.max(0,Math.min(total,Number(time)||0));let start=0;for(let index=0;index<motion.length;index++){const end=start+motion[index].seconds;if(t<end||index===motion.length-1)return {index,fraction:(t-start)/motion[index].seconds,start,total,time:t};start=end}return {index:-1,fraction:0,start:0,total:0,time:0}}
+export function phaseTime(motion,index){return motion.slice(0,Math.max(0,index)).reduce((n,p)=>n+p.seconds,0)}
