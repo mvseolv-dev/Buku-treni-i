@@ -1,3 +1,13 @@
+# BUKI animētā bibliotēka
+
+32 jaunās BUKI shēmas ir oriģināli veidotas mācību secības ar pašu rakstītiem paskaidrojumiem latviski. Tās nav Hoops Geek shēmu kopijas vai eksporti. Bāzes principi: metiena sekošana, piespēle un iegrieziens, vietas aizpildīšana, palīdzības aizsardzība. Vispārīgai principu pārbaudei izmantoti FIBA/WABC publiskie trenera materiāli: https://about.fiba.basketball/en/wabc-documents .
+
+Shēmas ar aizsargiem rāda vienu iepriekš saskaņotu izspēli, nevis visas iespējamās spēles situācijas. Metiena shēmās ir trāpījuma piemērs; īstā treniņā pēc neprecīza metiena jāsavāc atlēkusī bumba. Skaits 1-12 nozīmē precīzu aktīvo vietu sadalījumu un pārējo dalībnieku rotāciju, nevis vienlaicīgu 12 cilvēku darbu katrā vingrinājumā.
+
+Hoops Geek kataloga 56 ieraksti un oriģinālo autoru YouTube demonstrācijas atrodas atsevišķā bibliotēkas filtrā. Avota saites saglabātas hoops-data.js. Tās nav BUKI pašu animācijas. Vecā 5-4-3-2-1 shēma saglabāta atsevišķi bez maršruta izmaiņām.
+
+## Iepriekšējās versijas avotu vēsture
+
 # Vingrinājumu demonstrējumu avoti
 
 ## Pārbaudīts: Free Exercise DB

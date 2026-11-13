@@ -1,0 +1,66 @@
+import {rotationFor,COURT} from './motion-data.js';
+const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+const clamp=n=>Math.max(0,Math.min(1,n));
+const mix=(a,b,f)=>[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f];
+export function pathPoint(points,f){if(f<=0)return [...points[0]];if(f>=1)return [...points.at(-1)];const lens=points.slice(1).map((p,i)=>Math.hypot(p[0]-points[i][0],p[1]-points[i][1]));let d=clamp(f)*lens.reduce((a,b)=>a+b,0);for(let i=0;i<lens.length;i++){if(d<=lens[i]&&lens[i]>0)return mix(points[i],points[i+1],d/lens[i]);d-=lens[i]}return points.at(-1)}
+const routePath=points=>'M'+points.map(p=>p.join(' ')).join('L');
+function held(position){return [position[0]+26,position[1]+2]}
+export function stateAt(step,f){
+ f=clamp(f);const positions=step.before.positions.map(p=>[...p]);
+ for(const move of step.moves)positions[move.actor]=pathPoint(move.path,f);
+ const old=step.before.balls[0];let ball=old?(old.owner!==undefined?held(positions[old.owner]):[...old.point]):null;
+ const action=step.action;
+ if(action?.type==='pass')ball=mix(held(positions[action.from]),held(positions[action.to]),clamp((f-.08)/.84));
+ if(action?.type==='shot'){const start=held(positions[action.actor]);let t=clamp(f/.78);ball=mix(start,COURT.rim,t);ball[1]-=Math.sin(t*Math.PI)*48;if(f>.78)ball=mix(COURT.rim,COURT.rebound,(f-.78)/.22)}
+ if(action?.type==='collect'&&f>.8)ball=mix(COURT.rebound,held(positions[action.actor]),(f-.8)/.2);
+ if(f===1){const end=step.after.balls[0];ball=end?(end.owner!==undefined?held(positions[end.owner]):[...end.point]):null}
+ return {positions,ball};
+}
+
+const courtTemplate = `<svg class="court-svg motion-court" viewBox="0 0 600 540" role="img" aria-label="Vingrinājuma laukuma shēma"><title id="buki-court-title">Divu spēlētāju kustības un bumbas ceļš</title><desc id="buki-court-desc">Spēlētājs kreisajā malā atbrīvojas, saņem piespēli, met, savāc atlēkušo bumbu un mainās lomām ar piespēlētāju.</desc><defs><linearGradient id="buki-wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8c49a"/><stop offset=".5" stop-color="#d9ad7e"/><stop offset="1" stop-color="#edcba4"/></linearGradient>
+<pattern id="buki-parquet" width="94" height="27" patternUnits="userSpaceOnUse"><rect width="94" height="27" fill="url(#buki-wood)"/><path d="M0 0H94M0 27H94M0 0V27M94 0V27" stroke="#9f7142" stroke-opacity=".22" stroke-width=".6"/><path d="M4 7H86M12 18H92M0 22H46" stroke="#f6dbb4" stroke-opacity=".24" stroke-width=".7"/></pattern>
+<linearGradient id="buki-blue-player" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4a86f4"/><stop offset="1" stop-color="#174ca9"/></linearGradient>
+<linearGradient id="buki-white-player" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#cad6e5"/></linearGradient>
+<radialGradient id="buki-ball-fill" cx=".3" cy=".25"><stop stop-color="#ffc27d"/><stop offset="1" stop-color="#d7772b"/></radialGradient>
+<filter id="buki-player-shadow" x="-100%" y="-100%" width="300%" height="300%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#43260e" flood-opacity=".27"/></filter>
+<clipPath id="buki-floor-clip"><rect x="20" y="20" width="560" height="500" rx="12"/></clipPath>
+<radialGradient id="buki-court-shade"><stop stop-color="#263d41"/><stop offset="1" stop-color="#19292e"/></radialGradient><marker id="buki-run-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#245bdb" stroke-width="1.3"/></marker><marker id="buki-pass-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#a54413" stroke-width="1.3"/></marker></defs>
+<rect x="16" y="16" width="568" height="508" rx="15" fill="#40322c"/>
+<g clip-path="url(#buki-floor-clip)"><rect x="20" y="20" width="560" height="500" fill="url(#buki-parquet)"/><rect x="210" y="30" width="180" height="220" fill="#253e58"/><path d="M210 250A90 90 0 0 0 390 250" fill="#253e58" fill-opacity=".11"/><path d="M30 30H570V510H30Z" fill="none" stroke="#253e58" stroke-width="20"/><text x="300" y="461" fill="#6f4c2d" fill-opacity=".18" text-anchor="middle" font-family="Arial" font-weight="900" font-size="63" letter-spacing="15">BUKI</text></g>
+
+<g class="court-line"><path d="M30 30H570V510H30Z"/><path d="M210 30V250H390V30M210 250A90 90 0 0 0 390 250"/><path d="M210 250A90 90 0 0 1 390 250" stroke-dasharray="5 6"/><path d="M55 30V90A245 245 0 0 0 545 90V30"/><path d="M255 90A45 45 0 0 0 345 90"/><path d="M240 510A60 60 0 0 1 360 510"/><path d="M274 69H326" stroke-width="4"/></g>
+<circle cx="300" cy="88" r="10" fill="none" stroke="#a54413" stroke-width="3"/>
+
+<path data-route class="route" marker-end="url(#buki-run-arrow)"/><path data-ball-route class="pass-route" marker-end="url(#buki-pass-arrow)"/>
+<g data-actors></g><g data-basketball><circle r="10" fill="url(#buki-ball-fill)" stroke="#6f3516" stroke-width="1.3"/><path d="M-9 0H9M0-9V9M-6-7Q2 0-6 7M6-7Q-2 0 6 7" fill="none" stroke="#6d3f20" stroke-width="1"/></g>
+
+</svg>`;
+export function thumbnailFor(drill){
+ const dots=drill.start.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="21" fill="${i%2?'#f0f3f9':'#407ee3'}"/><text x="${p[0]}" y="${p[1]+8}" text-anchor="middle" fill="${i%2?'#18283e':'#fff'}" font-family="Arial" font-size="24" font-weight="700">${i+1}</text>`).join('');
+ return `<svg viewBox="0 0 600 540" aria-hidden="true"><rect width="600" height="540" fill="#dcba91"/><path d="M30 30H570V510H30Z M210 30V250H390V30 M55 30V90A245 245 0 0 0 545 90V30" fill="none" stroke="#fff2d6" stroke-width="3"/><rect x="210" y="30" width="180" height="220" fill="#29435c" opacity=".8"/><path d="M275 65H325" stroke="#fff" stroke-width="4"/><circle cx="300" cy="88" r="10" fill="none" stroke="#b7672a" stroke-width="4"/>${dots}</svg>`;
+}
+export function mountMotion(container,drill,options={}){
+ let count=Math.max(drill.teamSize,Number(options.players)||drill.teamSize),round=0,index=0,elapsed=0,playing=false,previous=0,raf=0,speed=1,mirror=false,disposed=false;
+ const q=s=>container.querySelector(s);
+ const defenderStart={'buki-closeout-pair':0,'buki-two-one':2,'buki-two-two':2,'buki-three-two':3,'buki-three-three':3,'buki-shell-eight':4,'buki-five-five':5}[drill.id];
+ container.className='motion-studio';
+ container.innerHTML=`<div class="buki-demo"><div class="demo-head"><div class="demo-brand">BUKI / TRENIŅU STUDIJA</div><h2>${esc(drill.name)}</h2><div class="demo-tags"><span>${drill.teamSize} laukumā</span><span>${drill.balls} ${drill.balls===1?'bumba':'bumbas'}</span><span>${drill.baskets} ${drill.baskets===1?'grozs':'grozi'}</span><span>${esc(drill.category)}</span></div><div class="motion-settings"><label>Treniņā <select data-count aria-label="Spēlētāji vingrinājumā">${Array.from({length:13-drill.teamSize},(_,i)=>i+drill.teamSize).map(n=>`<option value="${n}" ${n===count?'selected':''}>${n} cilvēki</option>`).join('')}</select></label><label>Temps <select data-speed aria-label="Animācijas ātrums"><option value=".65">Lēnāk</option><option value="1" selected>Parasti</option><option value="1.5">Ātrāk</option></select></label><label><input type="checkbox" data-mirror> Otra puse</label></div><div class="demo-queue" data-queue></div></div><div class="court-wrap">${courtTemplate}<div class="demo-legend"><span><i class="legend-run"></i> Kustība</span><span><i class="legend-pass"></i> Bumbas ceļš</span><span><i class="legend-ball"></i> Bumba</span></div></div><div class="demo-bottom"><div class="step-meta"><strong data-step-count></strong><span data-status>SĀKUMA VIETAS</span></div><div class="step-title" data-title></div><p class="step-description" data-description aria-live="polite"></p><div class="motion-progress" role="progressbar" aria-label="Animācijas progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-progress></span></div><div class="step-dots" aria-label="Vingrinājuma soļi">${drill.motion.map((s,i)=>`<button data-step="${i}" aria-label="${i+1}. ${esc(s.title)}">${i+1}</button>`).join('')}</div><div class="demo-controls"><button data-prev>← Solis</button><button class="demo-play" data-play>▶ Atskaņot</button><button data-next>Solis →</button><button data-round>Nākamā maiņa</button></div><p class="step-small">${esc(drill.tip)} ${drill.motion.some(s=>s.action?.type==='shot')?'Metienos parādīts trāpījuma piemērs. Pēc neprecīza metiena vispirms savāc bumbu. ':''}Animācijas temps nav darba intensitātes norāde.</p></div></div>`;
+ const svg=q('.motion-court'),actors=q('[data-actors]'),basketball=q('[data-basketball]'),route=q('[data-route]'),ballRoute=q('[data-ball-route]');
+ actors.innerHTML=drill.start.map((p,i)=>{const def=defenderStart!==undefined&&(drill.id==='buki-closeout-pair'?i===0:i>=defenderStart);return `<g data-actor="${i}" class="jersey-shadow"><circle r="28" fill="${def?'#15263a':'#fff'}" fill-opacity=".16"/><circle r="22" fill="url(#${def?'buki-white-player':'buki-blue-player'})" stroke="${def?'#314f74':'#e0edff'}" stroke-width="2.5"/><text class="player-number ${def?'defender':''}"></text></g>`}).join('');
+ const coneMarks=(drill.cones||[]).map(p=>`<path d="M${p[0]} ${p[1]-10}l-9 18h18Z" fill="#d46c24" stroke="#6c371c" stroke-width="1"/>`).join('');
+ if(coneMarks)actors.insertAdjacentHTML('beforebegin',coneMarks);
+ function mapping(){return rotationFor(drill,count,round)}
+ function translated(text){const active=mapping().active;return text.replace(/\b(\d+)\./g,(whole,n)=>Number(n)<=active.length?`${active[Number(n)-1]}.`:whole)}
+ function labels(){const s=drill.motion[index],map=mapping();q('[data-step-count]').textContent=`SOLIS ${index+1} / ${drill.motion.length}`;q('[data-title]').textContent=s.title;q('[data-description]').textContent=translated(s.text);q('[data-queue]').innerHTML=`<b>Laukumā:</b> ${map.active.join(', ')}${map.waiting.length?`<br><b>Gaidīšanas secība:</b> ${map.waiting.join(', ')}. Pēc atkārtojuma viena vieta pārbīdās uz nākamo spēlētāju.`:' · Visi iesaistīti.'}`;container.querySelectorAll('[data-step]').forEach(b=>b.setAttribute('aria-current',Number(b.dataset.step)===index?'step':'false'));q('[data-play]').textContent=playing?'Ⅱ Pauze':index===drill.motion.length-1&&elapsed>=drill.motion[index].seconds*1000?'↻ Atkārtot':'▶ Atskaņot';q('[data-prev]').disabled=index===0;q('[data-next]').disabled=index===drill.motion.length-1;actors.querySelectorAll('[data-actor]').forEach((a,i)=>a.querySelector('text').textContent=map.active[i]);}
+ function draw(){const phase=drill.motion[index],f=clamp(elapsed/(phase.seconds*1000)),state=stateAt(phase,f),flip=p=>mirror?[600-p[0],p[1]]:p;
+ actors.querySelectorAll('[data-actor]').forEach((a,i)=>a.setAttribute('transform',`translate(${flip(state.positions[i]).join(' ')})`));basketball.style.display=state.ball?'':'none';if(state.ball)basketball.setAttribute('transform',`translate(${flip(state.ball).join(' ')})`);
+ route.setAttribute('d',phase.moves.map(m=>routePath(m.path.map(flip))).join(' '));let bp='';if(phase.action?.type==='pass')bp=routePath([held(state.positions[phase.action.from]),held(state.positions[phase.action.to])].map(flip));if(phase.action?.type==='shot'){const a=flip(held(state.positions[phase.action.actor])),b=flip(COURT.rim);bp=`M${a.join(' ')}Q${(a[0]+b[0])/2} ${Math.min(a[1],b[1])-35} ${b.join(' ')}`}ballRoute.setAttribute('d',bp);
+ const done=drill.motion.slice(0,index).reduce((n,s)=>n+s.seconds,0)+elapsed/1000,total=drill.motion.reduce((n,s)=>n+s.seconds,0),pct=Math.round(clamp(done/total)*100);q('[data-progress]').style.width=pct+'%';q('.motion-progress').setAttribute('aria-valuenow',pct);q('[data-status]').textContent=playing?'KUSTĪBAS DEMONSTRĀCIJA':f===1&&index===drill.motion.length-1?'ATKĀRTOJUMS PABEIGTS':'PAUZĒTS';svg.setAttribute('aria-label',`${drill.name}. ${translated(phase.text)}`);}
+ function pause(){playing=false;previous=0;cancelAnimationFrame(raf);labels();draw()}
+ function tick(now){if(!playing||disposed)return;if(previous)elapsed+=Math.min(100,now-previous)*speed;previous=now;const limit=drill.motion[index].seconds*1000;if(elapsed>=limit){elapsed=limit;if(index<drill.motion.length-1){index++;elapsed=0;labels()}else{pause();return}}draw();raf=requestAnimationFrame(tick)}
+ function play(){if(index===drill.motion.length-1&&elapsed>=drill.motion[index].seconds*1000){index=0;elapsed=0}playing=true;previous=0;labels();raf=requestAnimationFrame(tick)}
+ function select(n){pause();index=n;elapsed=0;labels();draw()}
+ q('[data-play]').onclick=()=>playing?pause():play();q('[data-prev]').onclick=()=>select(Math.max(0,index-1));q('[data-next]').onclick=()=>select(Math.min(drill.motion.length-1,index+1));q('[data-round]').onclick=()=>{pause();round++;index=0;elapsed=0;labels();draw();q('[data-status]').textContent='JAUNĀ MAIŅA - IEŅEMIET VIETAS'};
+ q('[data-count]').onchange=e=>{pause();count=Number(e.target.value);round=0;select(0)};q('[data-speed]').onchange=e=>{speed=Number(e.target.value)};q('[data-mirror]').onchange=e=>{mirror=e.target.checked;draw()};container.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>select(Number(b.dataset.step)));labels();draw();
+ return ()=>{disposed=true;playing=false;cancelAnimationFrame(raf);container.replaceChildren()};
+}
