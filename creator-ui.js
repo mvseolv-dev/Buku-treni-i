@@ -1,5 +1,5 @@
-import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113i';
-import {courtMarkup,held} from './motion-player.js?v=20261113i';
+import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113j';
+import {courtMarkup,held} from './motion-player.js?v=20261113j';
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const path=points=>'M'+points.map(p=>p.join(' ')).join('L');
