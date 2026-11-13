@@ -11,8 +11,8 @@ export function stateAt(step,f){
  const old=step.before.balls[0];let ball=old?(old.owner!==undefined?held(positions[old.owner]):[...old.point]):null;
  const action=step.action;
  if(action?.type==='pass')ball=mix(held(positions[action.from]),held(positions[action.to]),clamp((f-.08)/.84));
- if(action?.type==='shot'){const start=held(positions[action.actor]);let t=clamp(f/.78);ball=mix(start,COURT.rim,t);ball[1]-=Math.sin(t*Math.PI)*48;if(f>.78)ball=mix(COURT.rim,COURT.rebound,(f-.78)/.22)}
- if(action?.type==='collect'&&f>.8)ball=mix(COURT.rebound,held(positions[action.actor]),(f-.8)/.2);
+ if(action?.type==='shot'){const start=held(positions[action.actor]);let t=clamp(f/.78);ball=mix(start,COURT.rim,t);ball[1]-=Math.sin(t*Math.PI)*48;if(f>.78)ball=mix(COURT.rim,step.after.balls[0]?.point||COURT.rebound,(f-.78)/.22)}
+ if(action?.type==='collect'&&f>.8)ball=mix(old?.point||COURT.rebound,held(positions[action.actor]),(f-.8)/.2);
  if(f===1){const end=step.after.balls[0];ball=end?(end.owner!==undefined?held(positions[end.owner]):[...end.point]):null}
  return {positions,ball};
 }
@@ -35,6 +35,7 @@ const courtTemplate = `<svg class="court-svg motion-court" viewBox="0 0 600 540"
 <g data-actors></g><g data-basketball><circle r="10" fill="url(#buki-ball-fill)" stroke="#6f3516" stroke-width="1.3"/><path d="M-9 0H9M0-9V9M-6-7Q2 0-6 7M6-7Q-2 0 6 7" fill="none" stroke="#6d3f20" stroke-width="1"/></g>
 
 </svg>`;
+export function courtMarkup(prefix='creator-'){return courtTemplate.replaceAll('buki-',prefix)}
 export function thumbnailFor(drill){
  const dots=drill.start.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="21" fill="${i%2?'#f0f3f9':'#407ee3'}"/><text x="${p[0]}" y="${p[1]+8}" text-anchor="middle" fill="${i%2?'#18283e':'#fff'}" font-family="Arial" font-size="24" font-weight="700">${i+1}</text>`).join('');
  return `<svg viewBox="0 0 600 540" aria-hidden="true"><rect width="600" height="540" fill="#dcba91"/><path d="M30 30H570V510H30Z M210 30V250H390V30 M55 30V90A245 245 0 0 0 545 90V30" fill="none" stroke="#fff2d6" stroke-width="3"/><rect x="210" y="30" width="180" height="220" fill="#29435c" opacity=".8"/><path d="M275 65H325" stroke="#fff" stroke-width="4"/><circle cx="300" cy="88" r="10" fill="none" stroke="#b7672a" stroke-width="4"/>${(drill.cones||[]).map(p=>`<path d="M${p[0]} ${p[1]-10}l-9 18h18Z" fill="#c86123" stroke="#6c371c" stroke-width="1"/>`).join('')}${dots}</svg>`;

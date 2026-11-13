@@ -1,3 +1,9 @@
+## Savu vingrinājumu veidotājs
+
+Oriģināls BUKI redaktors: sākuma pozīcijas, spēlētāju/aizsargu un konusu izvietošana, secīgas pārvietošanās, piespēles, metieni un bumbas savākšana. Vienā secībā tiek izsekota viena bumba. Tās piederība tiek pārbaudīta pirms katras piespēles un metiena. Lietotāja izvēlētu atlēkušās bumbas vietu un savācēju animācija rāda pēc metiena.
+
+Redaktors izmanto BUKI pašu kustību atskaņotāju. Saglabātie vingrinājumi un darba melnraksts paliek konkrētā pārlūka localStorage, bez konta un bez pārsūtīšanas uz serveri. JSON eksports/imports ļauj veidot rezerves kopiju. Importēto datu robežas, pozīcijas, bumbas piederība un tekstu garumi tiek pārbaudīti; tie netiek izpildīti kā kods.
+
 ## Treniņa ģenerators
 
 Trīs BUKI veidnes: dienu pirms spēles, iesildīšanās ar metieniem un pilns cikls. Atlase ņem vērā 1-12 cilvēkus, 1-2 grozus, bumbu un konusu skaitu. Atsevišķām stacijām inventāra patēriņš tiek summēts. Grupas tiek sadalītas bez pazaudētiem dalībniekiem, arī nepāra skaitam. Katra bloka laikā ietilpst izskaidrošana, atpūta un maiņas. Vingrinājuma animācijas ātrums nav slodzes intensitāte.
