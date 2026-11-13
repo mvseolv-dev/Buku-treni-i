@@ -1,6 +1,6 @@
 import {hoopsDrills} from './hoops-data.js';
-import {motionDrills} from './motion-data.js';
-import {mountMotion,thumbnailFor} from './motion-player.js';
+import {motionDrills} from './motion-data.js?v=20261113b';
+import {mountMotion,thumbnailFor} from './motion-player.js?v=20261113b';
 import {drills as oldDrills} from './training.js';
 import {diagramFor} from './diagrams.js';
 const original=oldDrills.find(d=>d.id==='countdown');
