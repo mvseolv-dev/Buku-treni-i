@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {motionDrills,rotationFor} from '../motion-data.js';
 import {stateAt} from '../motion-player.js';
 
-test('32 original sequences cover solo work, pairs, small groups and team play',()=>{
- assert.equal(motionDrills.length,32);assert.equal(new Set(motionDrills.map(d=>d.id)).size,32);
- for(const n of [1,2,3,4,5,6,8,10])assert.ok(motionDrills.some(d=>d.teamSize===n));
+test('100 original sequences cover solo work, pairs, small groups and team play',()=>{
+ assert.equal(motionDrills.length,100);assert.equal(new Set(motionDrills.map(d=>d.id)).size,100);
+ for(const n of [1,2,3,4,5,6,7,8,9,10])assert.ok(motionDrills.some(d=>d.teamSize===n));
  for(const category of ['Metieni','Noslēgumi','Dribls','Aizsardzība','Piespēles','Komandas darbs'])assert.ok(motionDrills.some(d=>d.category===category));
 });
 test('Every player count from 1 to 12 has eligible drills; rotation includes everyone exactly once and shares every role',()=>{
@@ -31,5 +31,12 @@ test('Every pass and shot comes from the actual ball holder; all steps preserve 
    for(const f of [0,.1,.25,.5,.75,.9,1]){const state=stateAt(s,f);assert.equal(state.positions.length,d.teamSize);for(const [x,y] of state.positions){assert.ok(Number.isFinite(x)&&x>=50&&x<=550,d.id);assert.ok(Number.isFinite(y)&&y>=100&&y<=490,d.id)}if(state.ball)assert.ok(state.ball.every(Number.isFinite))}
    assert.deepEqual(stateAt(s,0).positions,s.before.positions);assert.deepEqual(stateAt(s,1).positions,s.after.positions);previous=s.after;
   }
+ }
+});
+
+test('Explicit defensive roles stay within the authored participant set',()=>{
+ for(const d of motionDrills){
+  assert.ok(!JSON.stringify(d).includes('NOOP'));
+  if(d.defenders){assert.equal(new Set(d.defenders).size,d.defenders.length);for(const i of d.defenders)assert.ok(Number.isInteger(i)&&i>=0&&i<d.teamSize)}
  }
 });

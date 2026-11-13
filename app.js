@@ -1,12 +1,13 @@
 import {hoopsDrills} from './hoops-data.js';
-import {motionDrills} from './motion-data.js?v=20261113b';
-import {mountMotion,thumbnailFor} from './motion-player.js?v=20261113b';
+import {motionDrills} from './motion-data.js?v=20261113c';
+import {mountMotion,thumbnailFor} from './motion-player.js?v=20261113c';
 import {drills as oldDrills} from './training.js';
 import {diagramFor} from './diagrams.js';
 const original=oldDrills.find(d=>d.id==='countdown');
 const clean=s=>String(s).replace(/[\u2013\u2014]/g,'-');
 const countdown={...original,name:'5-4-3-2-1',original:'Tava saglabātā metienu secība',category:'Metieni',players:[1],videos:[],steps:original.steps.map(clean)};
 const drills=[...motionDrills,countdown,...hoopsDrills];
+document.querySelector('#studio-count').textContent=motionDrills.length;
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
 let favorites=new Set(read('buki-v2-favorites',[]).filter(id=>drills.some(d=>d.id===id))),plan=read('buki-v2-plan',[]).filter(x=>drills.some(d=>d.id===x.id)),view='all',step=0,disposeMotion=null,current=null;
