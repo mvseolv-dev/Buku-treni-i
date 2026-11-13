@@ -1,4 +1,4 @@
-import {rotationFor,COURT} from './motion-data.js';
+import {rotationFor,COURT} from './motion-data.js?v=20261113b';
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const clamp=n=>Math.max(0,Math.min(1,n));
 const mix=(a,b,f)=>[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f];
