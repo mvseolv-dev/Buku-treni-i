@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {motionDrills,rotationFor} from '../motion-data.js';
 import {stateAt} from '../motion-player.js';
 
-test('100 original sequences cover solo work, pairs, small groups and team play',()=>{
- assert.equal(motionDrills.length,100);assert.equal(new Set(motionDrills.map(d=>d.id)).size,100);
+test('108 original sequences cover solo work, pairs, small groups and team play',()=>{
+ assert.equal(motionDrills.length,108);assert.equal(new Set(motionDrills.map(d=>d.id)).size,108);
  for(const n of [1,2,3,4,5,6,7,8,9,10])assert.ok(motionDrills.some(d=>d.teamSize===n));
  for(const category of ['Metieni','Noslēgumi','Dribls','Aizsardzība','Piespēles','Komandas darbs'])assert.ok(motionDrills.some(d=>d.category===category));
 });

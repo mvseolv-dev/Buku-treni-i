@@ -1,4 +1,4 @@
-import {addExtraDrills} from './motion-extra.js?v=20261113c';
+import {addExtraDrills} from './motion-extra.js?v=20261113d';
 // Original BUKI teaching sequences. These are schematic successful repetitions,
 // not simulated decisions or exported Hoops Geek animations.
 export const COURT={rim:[300,88],rebound:[300,125]};

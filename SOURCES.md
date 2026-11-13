@@ -1,6 +1,12 @@
+## Treniņa ģenerators
+
+Trīs BUKI veidnes: dienu pirms spēles, iesildīšanās ar metieniem un pilns cikls. Atlase ņem vērā 1-12 cilvēkus, 1-2 grozus, bumbu un konusu skaitu. Atsevišķām stacijām inventāra patēriņš tiek summēts. Grupas tiek sadalītas bez pazaudētiem dalībniekiem, arī nepāra skaitam. Katra bloka laikā ietilpst izskaidrošana, atpūta un maiņas. Vingrinājuma animācijas ātrums nav slodzes intensitāte.
+
+Dinamiskas iesildīšanās un atsildīšanās vispārīgie principi pārbaudīti FIBA/WABC Level 1 un Level 2 materiālos: https://about.fiba.basketball/en/wabc-documents . Konkrētās minūšu proporcijas ir BUKI lietotnes veidnes, nevis FIBA noteikta programma. Rītdienas spēles gadījumā pilnais cikls tiek aizstāts ar tehnisku versiju līdz 60 minūtēm, bez kondicionēšanas un dzīvas spēles. Rītdienas treniņa gadījumā fiziskā un spēles bloka īpatsvars ir mazāks.
+
 # BUKI animētā bibliotēka
 
-100 BUKI shēmas ir oriģināli veidotas mācību secības ar pašu rakstītiem paskaidrojumiem latviski. Tās nav Hoops Geek shēmu kopijas vai eksporti. Paplašinājums ietver arī nekustīgus aizsegus bumbai un bez bumbas, īso iegriezienu, palīdzības aizsardzību un skaitliskā pārsvara mācību izspēles. Principu pārbaudei izmantota arī USA Basketball kategoriju sistēma: https://www.usab.com/skills-drills-players-foundational . Visas secības un latviešu teksti ir oriģināli veidoti. Bāzes principi: metiena sekošana, piespēle un iegrieziens, vietas aizpildīšana, palīdzības aizsardzība. Vispārīgai principu pārbaudei izmantoti FIBA/WABC publiskie trenera materiāli: https://about.fiba.basketball/en/wabc-documents .
+108 BUKI shēmas ir oriģināli veidotas mācību secības ar pašu rakstītiem paskaidrojumiem latviski. Tās nav Hoops Geek shēmu kopijas vai eksporti. Paplašinājums ietver arī nekustīgus aizsegus bumbai un bez bumbas, īso iegriezienu, palīdzības aizsardzību un skaitliskā pārsvara mācību izspēles. Principu pārbaudei izmantota arī USA Basketball kategoriju sistēma: https://www.usab.com/skills-drills-players-foundational . Visas secības un latviešu teksti ir oriģināli veidoti. Bāzes principi: metiena sekošana, piespēle un iegrieziens, vietas aizpildīšana, palīdzības aizsardzība. Vispārīgai principu pārbaudei izmantoti FIBA/WABC publiskie trenera materiāli: https://about.fiba.basketball/en/wabc-documents .
 
 Shēmas ar aizsargiem rāda vienu iepriekš saskaņotu izspēli, nevis visas iespējamās spēles situācijas. Metiena shēmās ir trāpījuma piemērs; īstā treniņā pēc neprecīza metiena jāsavāc atlēkusī bumba. Skaits 1-12 nozīmē precīzu aktīvo vietu sadalījumu un pārējo dalībnieku rotāciju, nevis vienlaicīgu 12 cilvēku darbu katrā vingrinājumā.
 
