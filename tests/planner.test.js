@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {generatePlan,modes,gameRounds,lightDrill,organizationFor} from '../planner.js';
+import {generatePlan,modes,gameRounds,lightDrill,organizationFor,retimeEntry} from '../planner.js';
 import {motionDrills} from '../motion-data.js';
 
 test('All modes and player counts keep exact time budgets and respect every inventory limit',()=>{
@@ -38,4 +38,10 @@ test('Cone drills cannot enter a plan with insufficient cones; parallel stations
  const d=motionDrills.find(d=>d.id==='buki-cones-triangle');
  assert.equal(organizationFor(d,{players:6,balls:2,cones:2,baskets:2}),null);
  const org=organizationFor(d,{players:6,balls:2,cones:6,baskets:2});assert.equal(org.groups.length,2);assert.equal(org.cones,6);assert.equal(org.balls,2);
+});
+
+test('Editing warm-up and conditioning duration also updates the work instructions',()=>{
+ const p=generatePlan({mode:'full',duration:90,players:7,balls:2,cones:6,baskets:2,tomorrow:'free'});
+ const warm=retimeEntry(p.entries[0],9);assert.equal(warm.minutes,9);assert.equal(warm.instructions.reduce((n,t)=>n+Number(t.match(/^\d+/)[0]),0),9);
+ const f=retimeEntry(p.entries[1],6);assert.match(f.instructions[0],/^6 apļi/);
 });
