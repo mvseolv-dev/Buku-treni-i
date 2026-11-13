@@ -1,8 +1,8 @@
-import {buildWorkspace} from './creator-workspace.js?v=20261113r';
-import {locateTime,phaseTime} from './studio-time.js?v=20261113r';
-import {marksMarkup} from './court-marks.js?v=20261113r';
-import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113r';
-import {courtMarkup,held,thumbnailFor,stateAt} from './motion-player.js?v=20261113r';
+import {buildWorkspace} from './creator-workspace.js?v=20261113s';
+import {locateTime,phaseTime} from './studio-time.js?v=20261113s';
+import {marksMarkup} from './court-marks.js?v=20261113s';
+import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113s';
+import {courtMarkup,held,thumbnailFor,stateAt} from './motion-player.js?v=20261113s';
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const path=points=>'M'+points.map(p=>p.join(' ')).join('L');
@@ -42,7 +42,7 @@ export function initCreator(root,{onSave,onPreview}={}){
  q('[data-ball-state]').textContent=`B${selectedBall+1}: `+(owner!==undefined?`Bumba ir Nr. ${owner+1}.`:b?.point?'Bumba atrodas laukumā - izvēlies, kurš to savāc.':'Šajā vingrinājumā bumbas nav.');
  q('[data-cone-count]').textContent=`${draft.cones.length} konusi`;q('[data-remove-cone]').disabled=selectedCone===null;q('[data-x]').value=Math.round(s.positions[selected][0]);q('[data-y]').value=Math.round(s.positions[selected][1]);
  q('[data-board-hint]').textContent=mode==='setup'?(tool==='cone'?'Pieskaries laukumam, lai noliktu konusu. Konusu var pārvilkt.':'Velc spēlētāju vai izvēlies tā numuru un pieskaries jaunajai sākuma vietai.'):tool==='select'?'Pieskaries spēlētājam, kuram piešķirt nākamo darbību.':tool==='pass'?'Pieskaries saņēmējam vai brīvai vietai laukumā, kur jādod piespēle.':tool==='shot'?(q('[data-pick]').value==='landing'?'Pieskaries atlēkušās bumbas savākšanas vietai.':'Pieskaries mērķim, uz kuru jāmet bumba.'):tool==='wait'?'Pievieno pauzi vai paskaidrojumu par nekustīgu aizsegu.':'Izvēlies spēlētāju un pieskaries kustības ceļa punktiem pareizā secībā.';
- q('[data-studio-help]').textContent=animateView?'Pārvieto laika joslu, lai apskatītu jebkuru kustības brīdi.':mode==='setup'?'Velc spēlētājus. Piešķir bumbas. Pēc tam atver darbību režīmu.':['move','pass','shot'].includes(tool)?'Velc no spēlētāja uz mērķi. Atlaižot darbība tiek pievienota.':'Izvēlies spēlētāju laukumā un darbību labajā pusē.';
+ q('[data-studio-confirm]').hidden=animateView||mode!=='actions'||tool==='select';q('[data-studio-help]').textContent=animateView?'Pārvieto laika joslu, lai apskatītu jebkuru kustības brīdi.':mode==='setup'?'Velc spēlētājus. Piešķir bumbas. Pēc tam atver darbību režīmu.':['move','pass','shot'].includes(tool)?'Velc no spēlētāja uz mērķi. Atlaižot darbība tiek pievienota.':'Izvēlies spēlētāju laukumā un darbību labajā pusē.';
  routeHandles.innerHTML=!animateView&&markTool==='off'&&['move','collect'].includes(tool)?points.map((p,i)=>`<circle data-route-handle="${i}" cx="${p[0]}" cy="${p[1]}" r="9" fill="#fff" stroke="#245bdb" stroke-width="3" role="img" aria-label="Kustības punkts ${i+1}"/>`).join(''):'';
  q('[data-route-info]').textContent=tool==='move'||tool==='collect'?`Iezīmēti ${points.length} ceļa punkti.${tool==='collect'?' Galapunkts pie bumbas tiek pievienots automātiski.':''}`:'';
  }
@@ -97,7 +97,7 @@ export function initCreator(root,{onSave,onPreview}={}){
   if(mode==='setup'){mode='actions';editing=null;q('[data-parallel]').checked=false}
   const balls=state().balls;if(['pass','shot'].includes(action)){const own=balls[selectedBall]?.owner===selected?selectedBall:balls.findIndex(b=>b.owner===selected);if(own<0){error(`Nr. ${selected+1} pašlaik nav bumbas. Piešķir to sākumā vai vispirms izveido piespēli / savākšanu.`);render();return}selectedBall=own}
   if(action==='collect'){const ground=balls[selectedBall]?.point?selectedBall:balls.findIndex(b=>b.point);if(ground<0){error('Pašlaik nav brīvas bumbas. Vispirms pievieno metienu vai piespēli uz vietu laukumā.');render();return}selectedBall=ground}
-  direct=true;tool=action;points=[];aimTarget=null;q('[data-aim]').value='default';q('[data-pick]').value='target';render();if(action==='pass'){q('[data-action-actor]').value=String((selected+1)%draft.start.length);draw()}
+  q('.studio-shell').dataset.panel='court';direct=true;tool=action;points=[];aimTarget=null;q('[data-aim]').value='default';q('[data-pick]').value='target';render();if(action==='pass'){q('[data-action-actor]').value=String((selected+1)%draft.start.length);draw()}
  };
  function renderPhases(built){let ai=0;const entries=built.motion.map((phase,i)=>{const first=ai;ai++;while(ai<draft.actions.length&&draft.actions[ai].parallel)ai++;let svg=thumbnailFor({...built,start:phase.before.positions});const dots=phase.before.balls.map((b,bi)=>{const p=b.owner===undefined?b.point:held(phase.before.positions[b.owner],bi);return `<circle cx="${p[0]}" cy="${p[1]}" r="12" fill="#db7b28" stroke="#623414" stroke-width="2"/>`}).join('');const routes=phase.moves.map(m=>`<path d="${path(m.path)}" fill="none" stroke="#245bdb" stroke-width="5" stroke-dasharray="9 7"/>`).join('')+(phase.actions||[phase.action]).filter(Boolean).map(a=>{if(a.type==='pass')return `<path d="${path([held(phase.before.positions[a.from],a.ball??0),a.target||held(phase.before.positions[a.to],a.ball??0)])}" fill="none" stroke="#a54413" stroke-width="5" stroke-dasharray="9 7"/>`;if(a.type==='shot')return `<path d="${path([held(phase.before.positions[a.actor],a.ball??0),a.target||[300,88]])}" fill="none" stroke="#a54413" stroke-width="5" stroke-dasharray="9 7"/>`;return ''}).join('');svg=svg.replace('</svg>',routes+dots+'</svg>');return `<button type="button" data-phase-action="${first}" class="${editing!==null&&editing>=first&&editing<ai?'current':''}" aria-label="Fāze ${i+1}: ${esc(phase.title)}">${svg}<span>${i+1}. ${esc(phase.title)}</span></button>`});q('[data-phases]').innerHTML=entries.join('')||'<p>Sākuma fāze. Izvēlies spēlētāju un pievieno viņa pirmo darbību.</p>'}
  q('[data-phases]').onclick=e=>{const b=e.target.closest('[data-phase-action]');if(b)q(`[data-edit-step="${b.dataset.phaseAction}"]`).click()};
@@ -126,7 +126,8 @@ export function initCreator(root,{onSave,onPreview}={}){
  q('[data-studio-speed]').onchange=e=>playSpeed=Number(e.target.value);
  q('[data-studio-restart]').onclick=()=>{pauseStudio();playTime=0;if(startAnimation()){syncStudio();draw()}};
  q('[data-studio-next]').onclick=()=>{pauseStudio();if(startAnimation()){const loc=locateTime(playBuilt.motion,playTime);playTime=loc.index+1<playBuilt.motion.length?phaseTime(playBuilt.motion,loc.index+1):loc.total;syncStudio();draw()}};
- const oldPhaseClick=q('[data-phases]').onclick;q('[data-phases]').onclick=e=>{pauseStudio();animateView=false;playBuilt=null;oldPhaseClick(e);const button=e.target.closest('[data-phase-action]');if(button){const built=checked(draft),actionIndex=Number(button.dataset.phaseAction),phase=draft.actions.slice(0,actionIndex+1).filter((a,i)=>i===0||!a.parallel).length-1;playTime=phaseTime(built.motion,phase);syncStudio()}};
+ const oldPhaseClick=q('[data-phases]').onclick;q('[data-phases]').onclick=e=>{pauseStudio();animateView=false;playBuilt=null;oldPhaseClick(e);const button=e.target.closest('[data-phase-action]');if(button){q('.studio-shell').dataset.panel='court';const built=checked(draft),actionIndex=Number(button.dataset.phaseAction),phase=draft.actions.slice(0,actionIndex+1).filter((a,i)=>i===0||!a.parallel).length-1;playTime=phaseTime(built.motion,phase);syncStudio()}};
+ q('[data-studio-confirm]').onclick=()=>q('[data-add-action]').click();
  const oldBack=q('[data-studio-back]').onclick;q('[data-studio-back]').onclick=()=>{pauseStudio();syncStudio();oldBack()};
  render();return {load};
 }
