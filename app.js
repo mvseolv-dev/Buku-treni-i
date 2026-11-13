@@ -1,9 +1,9 @@
-import {compileDraft,readSavedDrafts} from './creator-model.js?v=20261113g';
-import {initCreator} from './creator-ui.js?v=20261113h';
+import {compileDraft,readSavedDrafts} from './creator-model.js?v=20261113i';
+import {initCreator} from './creator-ui.js?v=20261113i';
 import {generatePlan,modes,candidates,lightDrill,retimeEntry} from './planner.js?v=20261113f';
 import {hoopsDrills} from './hoops-data.js';
 import {motionDrills} from './motion-data.js?v=20261113d';
-import {mountMotion,thumbnailFor} from './motion-player.js?v=20261113h';
+import {mountMotion,thumbnailFor} from './motion-player.js?v=20261113i';
 import {drills as oldDrills} from './training.js';
 import {diagramFor} from './diagrams.js';
 const original=oldDrills.find(d=>d.id==='countdown');
@@ -67,3 +67,4 @@ function renderSession(){const total=plan.reduce((n,e)=>n+e.minutes,0),settings=
 function swapEntry(key){const entry=plan.find(p=>p.key===key),d=drills.find(d=>d.id===entry?.id);if(!entry||!d||!sessionMeta?.settings)return;const s=sessionMeta.settings;const light=s.mode!=='full'||s.tomorrow==='game';let pool=candidates([d.category],s,{light,used:plan.filter(p=>p.key!==key).map(p=>p.id)}).filter(p=>p.drill.id!==d.id);if(!pool.length)return;const next=pool[(generationSeed++)%pool.length];Object.assign(entry,{id:next.drill.id,title:next.drill.name,organization:next.organization,required:{balls:next.organization.balls,cones:next.organization.cones,baskets:next.organization.baskets},instructions:[`${next.organization.groups.length===1?'Visi strādā vienā grupā.':'Grupas strādā paralēli savos grozos vai joslās.'} Katrā grupā vienlaikus darbojas ${next.drill.teamSize} ${next.drill.teamSize===1?'cilvēks':'cilvēki'}.`,`Pēc pilnas secības pārbīdiet lomas par vienu cilvēku. Laiks ietver īsas pauzes un maiņas.`]});save()}
 
 function syncCustomDrills(){for(let i=drills.length-1;i>=0;i--)if(drills[i].custom)drills.splice(i,1);drills.unshift(...readSavedDrafts(localStorage).map(d=>compileDraft(d)));render()}
+

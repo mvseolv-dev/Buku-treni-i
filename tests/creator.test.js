@@ -15,3 +15,22 @@ test('Editing a pass destination cannot silently make a later shot come from a n
 test('Import validates limits, coordinates, identities and visible text before use',()=>{const d=example();assert.equal(parseDraft(JSON.stringify(d)).id,d.id);assert.throws(()=>parseDraft('{broken'));assert.throws(()=>parseDraft(' '.repeat(200001)));for(const patch of [{id:'<script>'},{start:[[0,0]]},{start:[[110,330],[110,330]]},{cones:Array.from({length:31},()=>[200,200])},{defenders:[99]},{name:'a'}])assert.throws(()=>compileDraft({...d,...patch}));assert.throws(()=>compileDraft({...d,actions:[{...pass(1,0),seconds:0}]}));assert.throws(()=>compileDraft({...d,actions:[{...pass(1,0),note:'a'.repeat(301)}]}))});
 test('Saving edits preserves identity, survives a reload and reports storage failure',()=>{const m=new Map(),storage={getItem:k=>m.get(k)||null,setItem:(k,v)=>m.set(k,v)};const d=example();saveDraftRecord(storage,d);d.name='Mans labotais vingrinājums';saveDraftRecord(storage,d);const saved=readSavedDrafts(storage);assert.equal(saved.length,1);assert.equal(saved[0].name,d.name);assert.equal(saved[0].id,d.id);assert.ok(m.has(CUSTOM_KEY));assert.throws(()=>saveDraftRecord({getItem:()=>null,setItem:()=>{throw Error('quota')}},d),/Neizdevās saglabāt/)});
 test('An unfinished draft can be exported but cannot enter the finished library',()=>{const d=createDraft();compileDraft(d,{allowEmpty:true});assert.equal(parseDraft(JSON.stringify(d)).actions.length,0);assert.throws(()=>compileDraft(d),/vismaz vienu darbību/)});
+
+
+test('Two balls preserve independent ownership through simultaneous pass and shot, rebound and outlet',()=>{
+ const d=createDraft();d.initialBalls=[{owner:0},{owner:1}];d.actions=[{...pass(0,2),ball:0},{...shot(1,'miss',[430,190]),ball:1,parallel:true},{...collect(0),ball:1},{...pass(0,1),ball:1}];
+ const out=compileDraft(d);assert.equal(out.balls,2);assert.equal(out.motion.length,3);assert.equal(out.motion[0].actions.length,2);assert.deepEqual(out.motion[0].after.balls,[{owner:2},{point:[430,190]}]);assert.equal(finalState(d).balls[1].owner,1);
+ for(let i=1;i<out.motion.length;i++)assert.deepEqual(stateAt(out.motion[i-1],1),stateAt(out.motion[i],0));
+ const mid=stateAt(out.motion[0],.5);assert.equal(mid.balls.length,2);assert.notDeepEqual(mid.balls,stateAt(out.motion[0],0).balls);
+ assert.deepEqual(parseDraft(JSON.stringify(d)),d);
+});
+test('Parallel movement supports a moving receiver and rejects duplicate ball use or conflicting routes',()=>{
+ const d=createDraft();d.initialBalls=[{owner:0},{owner:1}];d.actions=[pass(0,2),{...move(2,[[430,360]]),parallel:true}];assert.equal(compileDraft(d).motion[0].moves.length,1);assert.deepEqual(finalState(d).positions[2],[430,360]);
+ d.actions=[pass(0,2),{...shot(0),parallel:true}];assert.throws(()=>compileDraft(d),/jau ir darbība/);
+ d.actions=[move(2,[[430,360]]),{...move(2,[[440,300]]),parallel:true}];assert.throws(()=>compileDraft(d),/jau ir kustības ceļš/);
+});
+test('Multi-ball boundaries, ground setup, two-ball dribble and legacy saved records remain valid',()=>{
+ const d=createDraft();d.initialBalls=[{owner:0},{owner:0},{point:[430,190]}];d.actions=[move(0,[[200,300]]),{...collect(2),ball:2}];assert.equal(compileDraft(d).balls,3);assert.equal(finalState(d).balls[2].owner,2);assert.notDeepEqual(stateAt(compileDraft(d).motion[0],.5).balls[0],stateAt(compileDraft(d).motion[0],.5).balls[1]);
+ assert.throws(()=>compileDraft({...d,initialBalls:Array.from({length:13},()=>({owner:0}))}));assert.throws(()=>compileDraft({...d,actions:[{...pass(0,1),ball:9}]}));assert.throws(()=>compileDraft({...d,actions:Array.from({length:81},()=>({...move(0,[[200,300]]),parallel:true}))}));
+ const legacy=example(),storage={getItem:()=>JSON.stringify([legacy,d])};assert.equal(readSavedDrafts(storage).length,2);
+});
