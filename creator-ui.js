@@ -1,8 +1,8 @@
-import {buildWorkspace} from './creator-workspace.js?v=20261113s';
-import {locateTime,phaseTime} from './studio-time.js?v=20261113s';
-import {marksMarkup} from './court-marks.js?v=20261113s';
-import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113s';
-import {courtMarkup,held,thumbnailFor,stateAt} from './motion-player.js?v=20261113s';
+import {buildWorkspace} from './creator-workspace.js?v=20261113t';
+import {locateTime,phaseTime} from './studio-time.js?v=20261113t';
+import {marksMarkup} from './court-marks.js?v=20261113t';
+import {createDraft,defaultPositions,compileDraft,finalState,readSavedDrafts,saveDraftRecord,parseDraft,DRAFT_KEY} from './creator-model.js?v=20261113t';
+import {courtMarkup,held,thumbnailFor,stateAt} from './motion-player.js?v=20261113t';
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const path=points=>'M'+points.map(p=>p.join(' ')).join('L');
@@ -66,7 +66,7 @@ export function initCreator(root,{onSave,onPreview}={}){
  q('[data-count]').onchange=e=>{const n=Number(e.target.value),next=clone(draft);if(n>next.start.length)next.start.push(...defaultPositions(n).slice(next.start.length));else next.start=next.start.slice(0,n);next.defenders=next.defenders.filter(i=>i<n);if(!next.actions.length&&next.initialBalls)next.initialBalls=next.initialBalls.map(b=>b.owner>=n?{owner:0}:b);if(!next.actions.length&&next.initialOwner!==null&&next.initialOwner>=n)next.initialOwner=0;editing=null;points=[];if(!commit(next))render()};
  q('[data-ball-count]').onchange=e=>{const next=clone(draft),n=Number(e.target.value);next.initialBalls=initialBalls().slice(0,n);while(next.initialBalls.length<n)next.initialBalls.push({owner:next.initialBalls.length%draft.start.length});if(!commit(next))render()};
  q('[data-setup-ball]').onchange=q('[data-action-ball]').onchange=e=>{selectedBall=Number(e.target.value);points=[];options();draw()};
- q('[data-parallel]').onchange=()=>{points=[];draw()};
+ q('[data-parallel]').onchange=()=>{draw()};
  q('[data-owner]').onchange=e=>{const next=clone(draft);next.initialBalls=initialBalls();if(!next.initialBalls.length)return;next.initialBalls[selectedBall]=Number(e.target.value)<0?{point:[365,160]}:{owner:Number(e.target.value)};if(!commit(next))render()};
  q('[data-ground-ball]').onclick=()=>{const next=clone(draft);next.initialBalls=initialBalls();if(!next.initialBalls.length){error('Vispirms pievieno bumbu.');return}next.initialBalls[selectedBall]={point:[Number(q('[data-x]').value),Number(q('[data-y]').value)]};commit(next)};q('[data-selected]').onchange=e=>{selected=Number(e.target.value);selectedCone=null;render()};q('[data-role]').onchange=e=>{const next=clone(draft);next.defenders=next.defenders.filter(i=>i!==selected);if(e.target.value==='defense')next.defenders.push(selected);commit(next)};
  q('[data-cone-mode]').onclick=()=>{tool=tool==='cone'?'move':'cone';q('[data-cone-mode]').setAttribute('aria-pressed',tool==='cone');draw()};q('[data-remove-cone]').onclick=()=>{if(selectedCone===null)return;const next=clone(draft);next.cones.splice(selectedCone,1);selectedCone=null;commit(next)};
