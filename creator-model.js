@@ -1,3 +1,4 @@
+import {validateMarks} from './court-marks.js?v=20261113o';
 import {COURT} from './motion-data.js?v=20261113d';
 export const CUSTOM_KEY='buki-custom-drills-v1';
 export const DRAFT_KEY='buki-creator-draft-v1';
@@ -18,6 +19,7 @@ function compileSingle(input,{allowEmpty=false,continuation=false}={}){
  if(!Array.isArray(d.defenders)||d.defenders.some(i=>!validActor(i))||new Set(d.defenders).size!==d.defenders.length)throw Error('Pārbaudi aizsargu numurus.');
  if(!Array.isArray(d.cones)||d.cones.length>30||!d.cones.every(p=>point(p,[40,560,45,495])))throw Error('Atļauti līdz 30 konusiem laukumā.');
  if(!Array.isArray(d.actions)||d.actions.length>80||(!allowEmpty&&!d.actions.length))throw Error('Pievieno vismaz vienu darbību; vienā vingrinājumā atļauti 80 soļi.');
+ validateMarks(d.marks);
  const initial=d.initialBalls??(d.initialOwner===null?[]:[{owner:d.initialOwner}]);if(!Array.isArray(initial)||initial.length>12||initial.some(b=>!b||(b.owner!==undefined?!validActor(b.owner):!point(b.point,[90,530,120,470]))))throw Error('Atļautas 0-12 bumbas ar turētāju vai vietu laukumā.');let positions=copy(d.start),balls=copy(initial),motion=[];
  for(const [i,a] of d.actions.entries()){
   const fail=message=>{throw Error(`${i+1}. solis: ${message}`)};
@@ -34,7 +36,7 @@ function compileSingle(input,{allowEmpty=false,continuation=false}={}){
   if(a.type==='wait'){title='Pauze / pozīcija';text='Spēlētāji saglabā savas vietas.'}
   if(action)action.ball=bi;motion.push({title,text:a.note.trim()?text+' '+a.note.trim():text,moves,action,seconds:a.seconds,before,after:{positions:copy(positions),balls:copy(balls)}});
  }
- return {id:d.id,name:d.name.trim(),category:d.category,original:'Mans veidotais vingrinājums',custom:true,draft:d,teamSize:d.start.length,players:Array.from({length:13-d.start.length},(_,i)=>i+d.start.length),start:copy(d.start),cones:copy(d.cones),defenders:copy(d.defenders),balls:initial.length,baskets:d.actions.some(a=>a.type==='shot')?1:0,videos:[],motion,tip:'Paša veidota mācību secība. Pirms treniņa pārbaudi spēlētāju ceļus un atstāj brīvu vietu metieniem un piezemēšanās zonai.'};
+ return {id:d.id,name:d.name.trim(),category:d.category,original:'Mans veidotais vingrinājums',custom:true,draft:d,teamSize:d.start.length,players:Array.from({length:13-d.start.length},(_,i)=>i+d.start.length),start:copy(d.start),marks:copy(d.marks||[]),cones:copy(d.cones),defenders:copy(d.defenders),balls:initial.length,baskets:d.actions.some(a=>a.type==='shot')?1:0,videos:[],motion,tip:'Paša veidota mācību secība. Pirms treniņa pārbaudi spēlētāju ceļus un atstāj brīvu vietu metieniem un piezemēšanās zonai.'};
 }
 export function compileDraft(input,options={}){
  if(!Array.isArray(input?.actions)||input.actions.length>80)return compileSingle(input,options);
